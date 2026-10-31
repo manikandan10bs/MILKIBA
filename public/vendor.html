@@ -93,6 +93,228 @@
         </header>
 
 
+        
+        <!-- =====================================================
+             OVERALL ANALYTICS & MULTI-PERIOD REPORT DASHBOARD
+        ====================================================== -->
+        <section id="overallAnalyticsSection" class="analytics-dashboard" aria-label="Overall Dashboard and Analytics">
+            <div class="analytics-header">
+                <div>
+                    <h2>📊 Overall Analytics & Reports</h2>
+                    <p>Track business health, inventory balances, and export Day, Weekly, Monthly, and Yearly PDF reports.</p>
+                </div>
+                <div class="analytics-period-selector" role="group" aria-label="Report Period Selector">
+                    <button type="button" class="analytics-period-btn active" data-period="day">Day Report</button>
+                    <button type="button" class="analytics-period-btn" data-period="week">Weekly Report</button>
+                    <button type="button" class="analytics-period-btn" data-period="month">Monthly Report</button>
+                    <button type="button" class="analytics-period-btn" data-period="year">Yearly Report</button>
+                    <button type="button" class="analytics-period-btn" data-period="all">All-Time</button>
+                </div>
+            </div>
+
+            <div class="analytics-filter-bar">
+                <div class="analytics-inputs">
+                    <div id="filterDayContainer" class="filter-input-group">
+                        <label for="reportDayInput">Select Date:</label>
+                        <input type="date" id="reportDayInput">
+                    </div>
+                    <div id="filterWeekContainer" class="filter-input-group hidden">
+                        <label for="reportWeekInput">Week (Pick any day in week):</label>
+                        <input type="date" id="reportWeekInput">
+                    </div>
+                    <div id="filterMonthContainer" class="filter-input-group hidden">
+                        <label for="reportMonthInput">Select Month:</label>
+                        <input type="month" id="reportMonthInput">
+                    </div>
+                    <div id="filterYearContainer" class="filter-input-group hidden">
+                        <label for="reportYearInput">Select Year:</label>
+                        <select id="reportYearInput"></select>
+                    </div>
+                    <span id="activePeriodLabel" class="active-period-badge">Today</span>
+                </div>
+
+                <div class="analytics-actions">
+                    <button type="button" id="downloadFullReportPdfBtn" class="btn-pdf-primary">
+                        📄 Download Full Report (PDF)
+                    </button>
+                    <button type="button" id="downloadCollectionsPdfBtn" class="btn-pdf-secondary">
+                        🥛 Collections PDF
+                    </button>
+                    <button type="button" id="downloadSuppliesPdfBtn" class="btn-pdf-secondary">
+                        🚚 Supplies PDF
+                    </button>
+                </div>
+            </div>
+
+            <!-- 8 KPI Metrics Cards -->
+            <div class="analytics-kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-icon collected-icon">🥛</div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">Milk Collected</span>
+                        <span id="kpiCollectedLiters" class="kpi-value">0.00 L</span>
+                        <span id="kpiCollectedCount" class="kpi-sub">0 collections</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon supplied-icon">🚚</div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">Milk Supplied</span>
+                        <span id="kpiSuppliedLiters" class="kpi-value">0.00 L</span>
+                        <span id="kpiSuppliedCount" class="kpi-sub">0 supplies</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon stock-icon">📦</div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">Stock Margin / Balance</span>
+                        <span id="kpiNetStockLiters" class="kpi-value">0.00 L</span>
+                        <span id="kpiStockStatus" class="kpi-sub">Balanced</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon cost-icon">💸</div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">Total Purchase Cost</span>
+                        <span id="kpiPurchaseCost" class="kpi-value">₹0.00</span>
+                        <span id="kpiPaidToSellers" class="kpi-sub">Paid: ₹0.00</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon revenue-icon">💰</div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">Total Sales Revenue</span>
+                        <span id="kpiSalesRevenue" class="kpi-value">₹0.00</span>
+                        <span id="kpiReceivedFromBuyers" class="kpi-sub">Collected: ₹0.00</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon profit-icon">📈</div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">Gross Margin / Profit</span>
+                        <span id="kpiGrossMargin" class="kpi-value">₹0.00</span>
+                        <span id="kpiMarginBadge" class="kpi-badge profit">0% Margin</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon payable-icon">⏳</div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">Seller Dues (Payable)</span>
+                        <span id="kpiPendingPayables" class="kpi-value text-danger">₹0.00</span>
+                        <span class="kpi-sub">Pending to farmers</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon receivable-icon">🧾</div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">Buyer Dues (Receivable)</span>
+                        <span id="kpiPendingReceivables" class="kpi-value text-warning">₹0.00</span>
+                        <span class="kpi-sub">Pending from buyers</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabbed Detailed Tables -->
+            <div class="analytics-detail-container">
+                <div class="analytics-detail-tabs">
+                    <button type="button" class="analytics-tab-btn active" data-tab="breakdown">📊 Period Breakdown</button>
+                    <button type="button" class="analytics-tab-btn" data-tab="collections">🥛 Collections (<span id="analyticsCollectionsCount">0</span>)</button>
+                    <button type="button" class="analytics-tab-btn" data-tab="supplies">🚚 Supplies (<span id="analyticsSuppliesCount">0</span>)</button>
+                </div>
+
+                <div id="analyticsTabBreakdown" class="analytics-tab-panel active">
+                    <div class="table-scroll-wrapper">
+                        <table class="analytics-table">
+                            <thead>
+                                <tr>
+                                    <th>Period / Date</th>
+                                    <th>Collections (L)</th>
+                                    <th>Supplies (L)</th>
+                                    <th>Stock Margin</th>
+                                    <th>Purchase Cost</th>
+                                    <th>Sales Revenue</th>
+                                    <th>Gross Profit</th>
+                                    <th>Pending Dues</th>
+                                </tr>
+                            </thead>
+                            <tbody id="analyticsBreakdownTbody">
+                                <tr>
+                                    <td colspan="8" style="text-align: center; padding: 25px; color: #777;">Loading breakdown data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="analyticsTabCollections" class="analytics-tab-panel">
+                    <div class="table-scroll-wrapper">
+                        <table class="analytics-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Session</th>
+                                    <th>Seller</th>
+                                    <th>Quantity (L)</th>
+                                    <th>Quality</th>
+                                    <th>Rate (₹/L)</th>
+                                    <th>Total (₹)</th>
+                                    <th>Paid (₹)</th>
+                                    <th>Pending (₹)</th>
+                                    <th>Status</th>
+                                    <th>Slip</th>
+                                </tr>
+                            </thead>
+                            <tbody id="analyticsCollectionsTbody">
+                                <tr>
+                                    <td colspan="11" style="text-align: center; padding: 25px; color: #777;">Loading collections...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="analyticsTabSupplies" class="analytics-tab-panel">
+                    <div class="table-scroll-wrapper">
+                        <table class="analytics-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Session</th>
+                                    <th>Buyer</th>
+                                    <th>Quantity (L)</th>
+                                    <th>Rate (₹/L)</th>
+                                    <th>Total (₹)</th>
+                                    <th>Paid (₹)</th>
+                                    <th>Pending (₹)</th>
+                                    <th>Status</th>
+                                    <th>Slip</th>
+                                </tr>
+                            </thead>
+                            <tbody id="analyticsSuppliesTbody">
+                                <tr>
+                                    <td colspan="10" style="text-align: center; padding: 25px; color: #777;">Loading supplies...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================
+             DAILY OPERATIONS & QUEUES (TODAY)
+        ====================================================== -->
+        <div class="section-divider">
+            <h3 class="section-divider-title">⚡ Daily Operations & Live Queue</h3>
+        </div>
+
         <section
             class="vendor-summary"
             aria-label="Daily Summary"
@@ -727,6 +949,7 @@
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
     ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
 
     <!-- =====================================================

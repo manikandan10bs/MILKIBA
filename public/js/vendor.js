@@ -939,6 +939,7 @@ async function loadDashboard() {
         await loadSupplyHistory();
 
         await updateSummary();
+        await loadOverallAnalytics();
 
     } catch (error) {
 
@@ -4172,4 +4173,693 @@ if (logoutButton) {
             }
         }
     );
+}
+
+/* =========================================================
+   OVERALL ANALYTICS & MULTI-PERIOD REPORT MODULE
+   Track Day, Weekly, Monthly, Yearly Reports & PDF Export
+========================================================= */
+
+let currentAnalyticsPeriod = 'day';
+let allVendorCollectionsCache = [];
+let allVendorSuppliesCache = [];
+
+let filteredPeriodCollections = [];
+let filteredPeriodSupplies = [];
+
+function initAnalyticsControls() {
+    const today = new Date();
+    const todayStr = today.toISOString().split('T')[0];
+    const monthStr = todayStr.slice(0, 7);
+    const yearStr = String(today.getFullYear());
+
+    const dayInput = document.getElementById('reportDayInput');
+    const weekInput = document.getElementById('reportWeekInput');
+    const monthInput = document.getElementById('reportMonthInput');
+    const yearInput = document.getElementById('reportYearInput');
+
+    if (dayInput) dayInput.value = todayStr;
+    if (weekInput) weekInput.value = todayStr;
+    if (monthInput) monthInput.value = monthStr;
+
+    if (yearInput && yearInput.options.length === 0) {
+        const curYear = today.getFullYear();
+        for (let y = curYear + 1; y >= curYear - 4; y--) {
+            const opt = document.createElement('option');
+            opt.value = String(y);
+            opt.textContent = String(y);
+            if (y === curYear) opt.selected = true;
+            yearInput.appendChild(opt);
+        }
+    }
+
+    // Period selector buttons
+    document.querySelectorAll('.analytics-period-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.analytics-period-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentAnalyticsPeriod = btn.dataset.period;
+            updateFilterInputsVisibility();
+            applyAnalyticsFilterAndRender();
+        });
+    });
+
+    // Date change listeners
+    if (dayInput) dayInput.addEventListener('change', () => applyAnalyticsFilterAndRender());
+    if (weekInput) weekInput.addEventListener('change', () => applyAnalyticsFilterAndRender());
+    if (monthInput) monthInput.addEventListener('change', () => applyAnalyticsFilterAndRender());
+    if (yearInput) yearInput.addEventListener('change', () => applyAnalyticsFilterAndRender());
+
+    // Tab buttons inside the analytics detail section
+    document.querySelectorAll('.analytics-tab-btn').forEach(tabBtn => {
+        tabBtn.addEventListener('click', () => {
+            document.querySelectorAll('.analytics-tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.analytics-tab-panel').forEach(p => p.classList.remove('active'));
+
+            tabBtn.classList.add('active');
+            const targetTab = tabBtn.dataset.tab;
+            if (targetTab === 'breakdown') {
+                const el = document.getElementById('analyticsTabBreakdown');
+                if (el) el.classList.add('active');
+            } else if (targetTab === 'collections') {
+                const el = document.getElementById('analyticsTabCollections');
+                if (el) el.classList.add('active');
+            } else if (targetTab === 'supplies') {
+                const el = document.getElementById('analyticsTabSupplies');
+                if (el) el.classList.add('active');
+            }
+        });
+    });
+
+    // PDF Download buttons
+    const fullPdfBtn = document.getElementById('downloadFullReportPdfBtn');
+    if (fullPdfBtn) fullPdfBtn.addEventListener('click', () => exportComprehensiveReportPDF());
+
+    const collectionsPdfBtn = document.getElementById('downloadCollectionsPdfBtn');
+    if (collectionsPdfBtn) collectionsPdfBtn.addEventListener('click', () => exportCollectionsReportPDF());
+
+    const suppliesPdfBtn = document.getElementById('downloadSuppliesPdfBtn');
+    if (suppliesPdfBtn) suppliesPdfBtn.addEventListener('click', () => exportSuppliesReportPDF());
+}
+
+function updateFilterInputsVisibility() {
+    const dayCont = document.getElementById('filterDayContainer');
+    const weekCont = document.getElementById('filterWeekContainer');
+    const monthCont = document.getElementById('filterMonthContainer');
+    const yearCont = document.getElementById('filterYearContainer');
+
+    if (dayCont) dayCont.classList.toggle('hidden', currentAnalyticsPeriod !== 'day');
+    if (weekCont) weekCont.classList.toggle('hidden', currentAnalyticsPeriod !== 'week');
+    if (monthCont) monthCont.classList.toggle('hidden', currentAnalyticsPeriod !== 'month');
+    if (yearCont) yearCont.classList.toggle('hidden', currentAnalyticsPeriod !== 'year');
+}
+
+function getWeekRange(dateString) {
+    const [y, m, d] = dateString.split('-').map(Number);
+    const date = new Date(y, m - 1, d);
+    const dayOfWeek = date.getDay(); // 0 is Sunday
+    const distanceToMonday = (dayOfWeek === 0 ? -6 : 1) - dayOfWeek;
+
+    const monday = new Date(date);
+    monday.setDate(date.getDate() + distanceToMonday);
+
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+
+    const format = (dt) => {
+        const yr = dt.getFullYear();
+        const mo = String(dt.getMonth() + 1).padStart(2, '0');
+        const dy = String(dt.getDate()).padStart(2, '0');
+        return `${yr}-${mo}-${dy}`;
+    };
+
+    const startStr = format(monday);
+    const endStr = format(sunday);
+
+    const options = { day: '2-digit', month: 'short', year: 'numeric' };
+    const label = `${monday.toLocaleDateString('en-IN', options)} - ${sunday.toLocaleDateString('en-IN', options)}`;
+
+    return { start: startStr, end: endStr, label };
+}
+
+async function loadOverallAnalytics() {
+    if (!currentUser) return;
+
+    try {
+        initAnalyticsControls();
+
+        // 1. Fetch all collections for current vendor
+        const colSnap = await get(ref(database, 'milkCollections'));
+        allVendorCollectionsCache = [];
+        if (colSnap.exists()) {
+            colSnap.forEach(child => {
+                const rec = child.val();
+                if (rec.vendorId === currentUser.uid && rec.recordStatus !== 'Deleted') {
+                    allVendorCollectionsCache.push({ id: child.key, ...rec });
+                }
+            });
+        }
+
+        // 2. Fetch all supplies for current vendor
+        const supSnap = await get(ref(database, 'milkSupplies'));
+        allVendorSuppliesCache = [];
+        if (supSnap.exists()) {
+            supSnap.forEach(child => {
+                const rec = child.val();
+                if (rec.vendorId === currentUser.uid && rec.recordStatus !== 'Deleted') {
+                    allVendorSuppliesCache.push({ id: child.key, ...rec });
+                }
+            });
+        }
+
+        applyAnalyticsFilterAndRender();
+    } catch (err) {
+        console.error('Error loading overall analytics:', err);
+    }
+}
+
+function applyAnalyticsFilterAndRender() {
+    const dayInput = document.getElementById('reportDayInput');
+    const weekInput = document.getElementById('reportWeekInput');
+    const monthInput = document.getElementById('reportMonthInput');
+    const yearInput = document.getElementById('reportYearInput');
+
+    const selectedDay = dayInput ? dayInput.value : '';
+    const selectedWeekBase = weekInput ? weekInput.value : '';
+    const selectedMonth = monthInput ? monthInput.value : '';
+    const selectedYear = yearInput ? yearInput.value : '';
+
+    let periodLabelText = '';
+
+    filteredPeriodCollections = [];
+    filteredPeriodSupplies = [];
+
+    if (currentAnalyticsPeriod === 'day') {
+        const targetDate = selectedDay || new Date().toISOString().split('T')[0];
+        periodLabelText = `Day Report: ${targetDate}`;
+        filteredPeriodCollections = allVendorCollectionsCache.filter(r => r.date === targetDate);
+        filteredPeriodSupplies = allVendorSuppliesCache.filter(r => r.date === targetDate);
+    } else if (currentAnalyticsPeriod === 'week') {
+        const baseDate = selectedWeekBase || new Date().toISOString().split('T')[0];
+        const week = getWeekRange(baseDate);
+        periodLabelText = `Weekly Report: ${week.label}`;
+        filteredPeriodCollections = allVendorCollectionsCache.filter(r => r.date >= week.start && r.date <= week.end);
+        filteredPeriodSupplies = allVendorSuppliesCache.filter(r => r.date >= week.start && r.date <= week.end);
+    } else if (currentAnalyticsPeriod === 'month') {
+        const targetMonth = selectedMonth || new Date().toISOString().slice(0, 7);
+        const [yr, mo] = targetMonth.split('-');
+        const monthName = new Date(Number(yr), Number(mo) - 1, 1).toLocaleString('en-IN', { month: 'long', year: 'numeric' });
+        periodLabelText = `Monthly Report: ${monthName}`;
+        filteredPeriodCollections = allVendorCollectionsCache.filter(r => String(r.date || '').startsWith(targetMonth));
+        filteredPeriodSupplies = allVendorSuppliesCache.filter(r => String(r.date || '').startsWith(targetMonth));
+    } else if (currentAnalyticsPeriod === 'year') {
+        const targetYear = selectedYear || String(new Date().getFullYear());
+        periodLabelText = `Yearly Report: ${targetYear}`;
+        filteredPeriodCollections = allVendorCollectionsCache.filter(r => String(r.date || '').startsWith(targetYear));
+        filteredPeriodSupplies = allVendorSuppliesCache.filter(r => String(r.date || '').startsWith(targetYear));
+    } else {
+        periodLabelText = 'All-Time Historical Report';
+        filteredPeriodCollections = [...allVendorCollectionsCache];
+        filteredPeriodSupplies = [...allVendorSuppliesCache];
+    }
+
+    // Sort descending by date, then session
+    const sortByDate = (a, b) => {
+        const cmp = String(b.date || '').localeCompare(String(a.date || ''));
+        if (cmp !== 0) return cmp;
+        return String(b.createdAt || '').localeCompare(String(a.createdAt || ''));
+    };
+    filteredPeriodCollections.sort(sortByDate);
+    filteredPeriodSupplies.sort(sortByDate);
+
+    // Update active period badge
+    const badgeEl = document.getElementById('activePeriodLabel');
+    if (badgeEl) badgeEl.textContent = periodLabelText;
+
+    // Calculate aggregated metrics
+    let totalCollectedLiters = 0;
+    let totalPurchaseCost = 0;
+    let paidToSellers = 0;
+    let pendingToSellers = 0;
+
+    filteredPeriodCollections.forEach(r => {
+        totalCollectedLiters += Number(r.actualQuantity) || 0;
+        totalPurchaseCost += Number(r.totalAmount) || 0;
+        paidToSellers += Number(r.paymentAmount) || 0;
+        pendingToSellers += Number(r.pendingAmount) || 0;
+    });
+
+    let totalSuppliedLiters = 0;
+    let totalSupplyRevenue = 0;
+    let receivedFromBuyers = 0;
+    let pendingFromBuyers = 0;
+
+    filteredPeriodSupplies.forEach(r => {
+        totalSuppliedLiters += Number(r.suppliedQuantity) || 0;
+        totalSupplyRevenue += Number(r.totalAmount) || 0;
+        receivedFromBuyers += Number(r.paymentAmount) || 0;
+        pendingFromBuyers += Number(r.pendingAmount) || 0;
+    });
+
+    const netStockLiters = totalCollectedLiters - totalSuppliedLiters;
+    const grossMargin = totalSupplyRevenue - totalPurchaseCost;
+    const marginPercent = totalPurchaseCost > 0 ? ((grossMargin / totalPurchaseCost) * 100).toFixed(1) : 0;
+
+    // Render KPI Metrics
+    const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+
+    setTxt('kpiCollectedLiters', `${totalCollectedLiters.toFixed(2)} L`);
+    setTxt('kpiCollectedCount', `${filteredPeriodCollections.length} collections`);
+
+    setTxt('kpiSuppliedLiters', `${totalSuppliedLiters.toFixed(2)} L`);
+    setTxt('kpiSuppliedCount', `${filteredPeriodSupplies.length} supplies`);
+
+    setTxt('kpiNetStockLiters', `${netStockLiters >= 0 ? '+' : ''}${netStockLiters.toFixed(2)} L`);
+    const stockStatusEl = document.getElementById('kpiStockStatus');
+    if (stockStatusEl) {
+        if (netStockLiters > 0) stockStatusEl.textContent = 'Surplus / In Stock';
+        else if (netStockLiters < 0) stockStatusEl.textContent = 'Deficit / Shortage';
+        else stockStatusEl.textContent = 'Even Balance';
+    }
+
+    setTxt('kpiPurchaseCost', `₹${totalPurchaseCost.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`);
+    setTxt('kpiPaidToSellers', `Paid: ₹${paidToSellers.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`);
+
+    setTxt('kpiSalesRevenue', `₹${totalSupplyRevenue.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`);
+    setTxt('kpiReceivedFromBuyers', `Collected: ₹${receivedFromBuyers.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`);
+
+    const grossMarginEl = document.getElementById('kpiGrossMargin');
+    if (grossMarginEl) {
+        grossMarginEl.textContent = `₹${grossMargin.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+        grossMarginEl.className = 'kpi-value ' + (grossMargin >= 0 ? 'text-success' : 'text-danger');
+    }
+
+    const marginBadgeEl = document.getElementById('kpiMarginBadge');
+    if (marginBadgeEl) {
+        marginBadgeEl.textContent = `${marginPercent}% Margin`;
+        marginBadgeEl.className = 'kpi-badge ' + (grossMargin >= 0 ? 'profit' : 'loss');
+    }
+
+    setTxt('kpiPendingPayables', `₹${pendingToSellers.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`);
+    setTxt('kpiPendingReceivables', `₹${pendingFromBuyers.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`);
+
+    setTxt('analyticsCollectionsCount', filteredPeriodCollections.length);
+    setTxt('analyticsSuppliesCount', filteredPeriodSupplies.length);
+
+    // Render Tables
+    renderPeriodBreakdownTable();
+    renderDetailedCollectionsTable();
+    renderDetailedSuppliesTable();
+}
+
+function renderPeriodBreakdownTable() {
+    const tbody = document.getElementById('analyticsBreakdownTbody');
+    if (!tbody) return;
+
+    // Group collections & supplies by period units
+    const groups = {};
+
+    const getKey = (dateStr) => {
+        if (!dateStr) return 'Unknown';
+        if (currentAnalyticsPeriod === 'year' || currentAnalyticsPeriod === 'all') {
+            return dateStr.slice(0, 7); // YYYY-MM
+        }
+        return dateStr; // YYYY-MM-DD
+    };
+
+    filteredPeriodCollections.forEach(r => {
+        const k = getKey(r.date);
+        if (!groups[k]) groups[k] = { label: k, inLiters: 0, outLiters: 0, cost: 0, rev: 0, pending: 0 };
+        groups[k].inLiters += Number(r.actualQuantity) || 0;
+        groups[k].cost += Number(r.totalAmount) || 0;
+        groups[k].pending += Number(r.pendingAmount) || 0;
+    });
+
+    filteredPeriodSupplies.forEach(r => {
+        const k = getKey(r.date);
+        if (!groups[k]) groups[k] = { label: k, inLiters: 0, outLiters: 0, cost: 0, rev: 0, pending: 0 };
+        groups[k].outLiters += Number(r.suppliedQuantity) || 0;
+        groups[k].rev += Number(r.totalAmount) || 0;
+        groups[k].pending += Number(r.pendingAmount) || 0;
+    });
+
+    const keys = Object.keys(groups).sort().reverse();
+    if (keys.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 25px; color: #777;">No transactions recorded for this period.</td></tr>';
+        return;
+    }
+
+    let rowsHtml = '';
+    keys.forEach(k => {
+        const g = groups[k];
+        const stock = g.inLiters - g.outLiters;
+        const profit = g.rev - g.cost;
+        rowsHtml += `
+            <tr>
+                <td><strong>${g.label}</strong></td>
+                <td>${g.inLiters.toFixed(2)} L</td>
+                <td>${g.outLiters.toFixed(2)} L</td>
+                <td><span style="font-weight: 700; color: ${stock >= 0 ? '#16803c' : '#dc2626'}">${stock >= 0 ? '+' : ''}${stock.toFixed(2)} L</span></td>
+                <td>₹${g.cost.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                <td>₹${g.rev.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                <td><span style="font-weight: 700; color: ${profit >= 0 ? '#16803c' : '#dc2626'}">₹${profit.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span></td>
+                <td>₹${g.pending.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+            </tr>
+        `;
+    });
+
+    tbody.innerHTML = rowsHtml;
+}
+
+function renderDetailedCollectionsTable() {
+    const tbody = document.getElementById('analyticsCollectionsTbody');
+    if (!tbody) return;
+
+    if (filteredPeriodCollections.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="11" style="text-align: center; padding: 25px; color: #777;">No collections found for this period.</td></tr>';
+        return;
+    }
+
+    let rowsHtml = '';
+    filteredPeriodCollections.forEach(r => {
+        const statusClass = r.paymentStatus === 'Paid' ? 'milkiba-status-paid' : (r.paymentStatus === 'Partial' ? 'milkiba-status-partial' : 'milkiba-status-notpaid');
+        rowsHtml += `
+            <tr>
+                <td>${r.date || '-'}</td>
+                <td><span class="milkiba-status" style="background: #f1f5f9; color: #334155; text-transform: capitalize;">${r.session || '-'}</span></td>
+                <td><strong>${r.sellerName || 'Farmer'}</strong></td>
+                <td>${Number(r.actualQuantity || 0).toFixed(2)} L</td>
+                <td>${r.quality || '-'}</td>
+                <td>₹${Number(r.rate || 0).toFixed(2)}</td>
+                <td><strong>₹${Number(r.totalAmount || 0).toFixed(2)}</strong></td>
+                <td>₹${Number(r.paymentAmount || 0).toFixed(2)}</td>
+                <td><span style="color: ${Number(r.pendingAmount || 0) > 0 ? '#dc2626' : '#16803c'}">₹${Number(r.pendingAmount || 0).toFixed(2)}</span></td>
+                <td><span class="milkiba-status ${statusClass}">${r.paymentStatus || 'Not Paid'}</span></td>
+                <td>
+                    <button type="button" class="milkiba-action-btn milkiba-pdf-btn" onclick="generateCollectionPDF('${r.id}')">Slip</button>
+                </td>
+            </tr>
+        `;
+    });
+
+    tbody.innerHTML = rowsHtml;
+}
+
+function renderDetailedSuppliesTable() {
+    const tbody = document.getElementById('analyticsSuppliesTbody');
+    if (!tbody) return;
+
+    if (filteredPeriodSupplies.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 25px; color: #777;">No supplies found for this period.</td></tr>';
+        return;
+    }
+
+    let rowsHtml = '';
+    filteredPeriodSupplies.forEach(r => {
+        const statusClass = r.paymentStatus === 'Paid' ? 'milkiba-status-paid' : (r.paymentStatus === 'Partial' ? 'milkiba-status-partial' : 'milkiba-status-notpaid');
+        rowsHtml += `
+            <tr>
+                <td>${r.date || '-'}</td>
+                <td><span class="milkiba-status" style="background: #f1f5f9; color: #334155; text-transform: capitalize;">${r.session || '-'}</span></td>
+                <td><strong>${r.buyerName || 'Buyer'}</strong></td>
+                <td>${Number(r.suppliedQuantity || 0).toFixed(2)} L</td>
+                <td>₹${Number(r.rate || 0).toFixed(2)}</td>
+                <td><strong>₹${Number(r.totalAmount || 0).toFixed(2)}</strong></td>
+                <td>₹${Number(r.paymentAmount || 0).toFixed(2)}</td>
+                <td><span style="color: ${Number(r.pendingAmount || 0) > 0 ? '#dc2626' : '#16803c'}">₹${Number(r.pendingAmount || 0).toFixed(2)}</span></td>
+                <td><span class="milkiba-status ${statusClass}">${r.paymentStatus || 'Not Paid'}</span></td>
+                <td>
+                    <button type="button" class="milkiba-action-btn milkiba-pdf-btn" onclick="generateSupplyPDF('${r.id}')">Slip</button>
+                </td>
+            </tr>
+        `;
+    });
+
+    tbody.innerHTML = rowsHtml;
+}
+
+/* =========================================================
+   COMPREHENSIVE PDF EXPORTS
+========================================================= */
+
+function exportComprehensiveReportPDF() {
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+        alert('PDF generation library is still loading. Please try again in a few seconds.');
+        return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+    const vendorName = (document.getElementById('userName') && document.getElementById('userName').textContent.trim()) || 'Vendor';
+    const periodLabel = (document.getElementById('activePeriodLabel') && document.getElementById('activePeriodLabel').textContent.trim()) || 'Report';
+
+    // Top Header Banner
+    doc.setFillColor(22, 128, 60); // #16803c
+    doc.rect(0, 0, 210, 26, 'F');
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(16);
+    doc.setTextColor(255, 255, 255);
+    doc.text('MILKIBA - DAIRY DISTRIBUTION MANAGEMENT', 14, 12);
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text('COMPREHENSIVE VENDOR AUDIT & FINANCIAL REPORT', 14, 20);
+
+    // Metadata
+    doc.setTextColor(33, 37, 41);
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`Vendor: ${vendorName}`, 14, 34);
+    doc.text(`Scope: ${periodLabel}`, 14, 40);
+
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Generated: ${new Date().toLocaleString('en-IN')}`, 120, 34);
+    doc.text(`Status: Verified Digital Record`, 120, 40);
+
+    // KPI Summary Cards in Table format
+    let totCol = 0, totCost = 0, pendSeller = 0;
+    filteredPeriodCollections.forEach(r => {
+        totCol += Number(r.actualQuantity) || 0;
+        totCost += Number(r.totalAmount) || 0;
+        pendSeller += Number(r.pendingAmount) || 0;
+    });
+
+    let totSup = 0, totRev = 0, pendBuyer = 0;
+    filteredPeriodSupplies.forEach(r => {
+        totSup += Number(r.suppliedQuantity) || 0;
+        totRev += Number(r.totalAmount) || 0;
+        pendBuyer += Number(r.pendingAmount) || 0;
+    });
+
+    const netStock = totCol - totSup;
+    const grossProfit = totRev - totCost;
+
+    if (doc.autoTable) {
+        doc.autoTable({
+            startY: 46,
+            theme: 'grid',
+            head: [['EXECUTIVE SUMMARY METRIC', 'RECORDED VALUE', 'EXECUTIVE SUMMARY METRIC', 'RECORDED VALUE']],
+            body: [
+                ['Total Milk Collected', `${totCol.toFixed(2)} Liters`, 'Total Purchase Cost', `Rs. ${totCost.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`],
+                ['Total Milk Supplied', `${totSup.toFixed(2)} Liters`, 'Total Sales Revenue', `Rs. ${totRev.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`],
+                ['Net Milk Balance (Stock)', `${netStock >= 0 ? '+' : ''}${netStock.toFixed(2)} Liters`, 'Gross Profit / Margin', `Rs. ${grossProfit.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`],
+                ['Seller Payable Dues', `Rs. ${pendSeller.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`, 'Buyer Receivable Dues', `Rs. ${pendBuyer.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`]
+            ],
+            headStyles: { fillColor: [30, 41, 59], fontSize: 9, fontStyle: 'bold' },
+            bodyStyles: { fontSize: 9 },
+            margin: { left: 14, right: 14 }
+        });
+
+        // Collections Table
+        const colRows = filteredPeriodCollections.map((r, i) => [
+            i + 1,
+            r.date || '',
+            r.session || '',
+            r.sellerName || 'Farmer',
+            Number(r.actualQuantity || 0).toFixed(2),
+            Number(r.rate || 0).toFixed(2),
+            Number(r.totalAmount || 0).toFixed(2),
+            Number(r.paymentAmount || 0).toFixed(2),
+            Number(r.pendingAmount || 0).toFixed(2),
+            r.paymentStatus || 'Not Paid'
+        ]);
+
+        doc.autoTable({
+            startY: doc.lastAutoTable.finalY + 10,
+            head: [['#', 'Date', 'Session', 'Seller / Farmer', 'Liters', 'Rate', 'Total (Rs)', 'Paid (Rs)', 'Balance (Rs)', 'Status']],
+            body: colRows.length > 0 ? colRows : [['-', '-', '-', 'No collections in this period', '-', '-', '-', '-', '-', '-']],
+            foot: colRows.length > 0 ? [['Total', '', '', `${colRows.length} Farmers`, totCol.toFixed(2), '', totCost.toFixed(2), '', pendSeller.toFixed(2), '']] : [],
+            headStyles: { fillColor: [22, 128, 60], fontSize: 8, fontStyle: 'bold' },
+            bodyStyles: { fontSize: 8 },
+            footStyles: { fillColor: [240, 253, 244], textColor: [22, 128, 60], fontStyle: 'bold', fontSize: 8 },
+            margin: { left: 14, right: 14 }
+        });
+
+        // Supplies Table
+        const supRows = filteredPeriodSupplies.map((r, i) => [
+            i + 1,
+            r.date || '',
+            r.session || '',
+            r.buyerName || 'Buyer',
+            Number(r.suppliedQuantity || 0).toFixed(2),
+            Number(r.rate || 0).toFixed(2),
+            Number(r.totalAmount || 0).toFixed(2),
+            Number(r.paymentAmount || 0).toFixed(2),
+            Number(r.pendingAmount || 0).toFixed(2),
+            r.paymentStatus || 'Not Paid'
+        ]);
+
+        doc.autoTable({
+            startY: doc.lastAutoTable.finalY + 10,
+            head: [['#', 'Date', 'Session', 'Buyer / Consumer', 'Liters', 'Rate', 'Total (Rs)', 'Paid (Rs)', 'Balance (Rs)', 'Status']],
+            body: supRows.length > 0 ? supRows : [['-', '-', '-', 'No supplies in this period', '-', '-', '-', '-', '-', '-']],
+            foot: supRows.length > 0 ? [['Total', '', '', `${supRows.length} Buyers`, totSup.toFixed(2), '', totRev.toFixed(2), '', pendBuyer.toFixed(2), '']] : [],
+            headStyles: { fillColor: [37, 99, 235], fontSize: 8, fontStyle: 'bold' },
+            bodyStyles: { fontSize: 8 },
+            footStyles: { fillColor: [239, 246, 255], textColor: [37, 99, 235], fontStyle: 'bold', fontSize: 8 },
+            margin: { left: 14, right: 14 }
+        });
+    }
+
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let p = 1; p <= pageCount; p++) {
+        doc.setPage(p);
+        doc.setFontSize(8);
+        doc.setTextColor(150);
+        doc.text(`MILKIBA Dairy Platform - Official Statement • Page ${p} of ${pageCount}`, 14, 290);
+    }
+
+    doc.save(`MILKIBA_Comprehensive_Report_${currentAnalyticsPeriod}_${new Date().toISOString().split('T')[0]}.pdf`);
+}
+
+function exportCollectionsReportPDF() {
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+        alert('PDF generation library is still loading. Please try again.');
+        return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+    const vendorName = (document.getElementById('userName') && document.getElementById('userName').textContent.trim()) || 'Vendor';
+    const periodLabel = (document.getElementById('activePeriodLabel') && document.getElementById('activePeriodLabel').textContent.trim()) || 'Report';
+
+    doc.setFillColor(22, 128, 60);
+    doc.rect(0, 0, 210, 24, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(15);
+    doc.setTextColor(255, 255, 255);
+    doc.text('MILKIBA - MILK COLLECTIONS AUDIT REPORT', 14, 12);
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Vendor: ${vendorName} | Period: ${periodLabel} | Generated: ${new Date().toLocaleString('en-IN')}`, 14, 19);
+
+    let totCol = 0, totCost = 0, pendSeller = 0;
+    const colRows = filteredPeriodCollections.map((r, i) => {
+        totCol += Number(r.actualQuantity) || 0;
+        totCost += Number(r.totalAmount) || 0;
+        pendSeller += Number(r.pendingAmount) || 0;
+        return [
+            i + 1,
+            r.date || '',
+            r.session || '',
+            r.sellerName || 'Farmer',
+            Number(r.actualQuantity || 0).toFixed(2),
+            Number(r.rate || 0).toFixed(2),
+            Number(r.totalAmount || 0).toFixed(2),
+            Number(r.paymentAmount || 0).toFixed(2),
+            Number(r.pendingAmount || 0).toFixed(2),
+            r.paymentStatus || 'Not Paid'
+        ];
+    });
+
+    if (doc.autoTable) {
+        doc.autoTable({
+            startY: 32,
+            head: [['#', 'Date', 'Session', 'Farmer Name', 'Liters', 'Rate', 'Total (Rs)', 'Paid (Rs)', 'Pending (Rs)', 'Status']],
+            body: colRows.length > 0 ? colRows : [['-', '-', '-', 'No collections in this period', '-', '-', '-', '-', '-', '-']],
+            foot: colRows.length > 0 ? [['Total', '', '', `${colRows.length} Collections`, totCol.toFixed(2), '', totCost.toFixed(2), '', pendSeller.toFixed(2), '']] : [],
+            headStyles: { fillColor: [22, 128, 60], fontSize: 8 },
+            bodyStyles: { fontSize: 8 },
+            footStyles: { fillColor: [240, 253, 244], textColor: [22, 128, 60], fontStyle: 'bold', fontSize: 8 },
+            margin: { left: 14, right: 14 }
+        });
+    }
+
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let p = 1; p <= pageCount; p++) {
+        doc.setPage(p);
+        doc.setFontSize(8);
+        doc.setTextColor(150);
+        doc.text(`MILKIBA Dairy Platform - Collections Statement • Page ${p} of ${pageCount}`, 14, 290);
+    }
+
+    doc.save(`MILKIBA_Collections_${currentAnalyticsPeriod}_${new Date().toISOString().split('T')[0]}.pdf`);
+}
+
+function exportSuppliesReportPDF() {
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+        alert('PDF generation library is still loading. Please try again.');
+        return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+    const vendorName = (document.getElementById('userName') && document.getElementById('userName').textContent.trim()) || 'Vendor';
+    const periodLabel = (document.getElementById('activePeriodLabel') && document.getElementById('activePeriodLabel').textContent.trim()) || 'Report';
+
+    doc.setFillColor(37, 99, 235);
+    doc.rect(0, 0, 210, 24, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(15);
+    doc.setTextColor(255, 255, 255);
+    doc.text('MILKIBA - MILK SUPPLIES AUDIT REPORT', 14, 12);
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Vendor: ${vendorName} | Period: ${periodLabel} | Generated: ${new Date().toLocaleString('en-IN')}`, 14, 19);
+
+    let totSup = 0, totRev = 0, pendBuyer = 0;
+    const supRows = filteredPeriodSupplies.map((r, i) => {
+        totSup += Number(r.suppliedQuantity) || 0;
+        totRev += Number(r.totalAmount) || 0;
+        pendBuyer += Number(r.pendingAmount) || 0;
+        return [
+            i + 1,
+            r.date || '',
+            r.session || '',
+            r.buyerName || 'Buyer',
+            Number(r.suppliedQuantity || 0).toFixed(2),
+            Number(r.rate || 0).toFixed(2),
+            Number(r.totalAmount || 0).toFixed(2),
+            Number(r.paymentAmount || 0).toFixed(2),
+            Number(r.pendingAmount || 0).toFixed(2),
+            r.paymentStatus || 'Not Paid'
+        ];
+    });
+
+    if (doc.autoTable) {
+        doc.autoTable({
+            startY: 32,
+            head: [['#', 'Date', 'Session', 'Buyer Name', 'Liters', 'Rate', 'Total (Rs)', 'Paid (Rs)', 'Pending (Rs)', 'Status']],
+            body: supRows.length > 0 ? supRows : [['-', '-', '-', 'No supplies in this period', '-', '-', '-', '-', '-', '-']],
+            foot: supRows.length > 0 ? [['Total', '', '', `${supRows.length} Supplies`, totSup.toFixed(2), '', totRev.toFixed(2), '', pendBuyer.toFixed(2), '']] : [],
+            headStyles: { fillColor: [37, 99, 235], fontSize: 8 },
+            bodyStyles: { fontSize: 8 },
+            footStyles: { fillColor: [239, 246, 255], textColor: [37, 99, 235], fontStyle: 'bold', fontSize: 8 },
+            margin: { left: 14, right: 14 }
+        });
+    }
+
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let p = 1; p <= pageCount; p++) {
+        doc.setPage(p);
+        doc.setFontSize(8);
+        doc.setTextColor(150);
+        doc.text(`MILKIBA Dairy Platform - Supplies Statement • Page ${p} of ${pageCount}`, 14, 290);
+    }
+
+    doc.save(`MILKIBA_Supplies_${currentAnalyticsPeriod}_${new Date().toISOString().split('T')[0]}.pdf`);
 }
