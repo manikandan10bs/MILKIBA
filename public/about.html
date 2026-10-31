@@ -1,0 +1,2185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>About MILKIBA</title>
+
+
+    <style>
+
+        /* =========================================
+           RESET
+        ========================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                #f5f8f6;
+
+            color:
+                #1f2933;
+
+            line-height:
+                1.6;
+        }
+
+
+        /* =========================================
+           NAVBAR
+        ========================================= */
+
+        .navbar {
+
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+
+            width: 100%;
+
+            height: 72px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding:
+                0 7%;
+
+            background:
+                rgba(255, 255, 255, 0.96);
+
+            border-bottom:
+                1px solid #e5e7eb;
+
+            box-shadow:
+                0 2px 15px rgba(0, 0, 0, 0.04);
+        }
+
+
+        .logo {
+
+            font-size:
+                25px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                1px;
+
+            color:
+                #1b5e20;
+        }
+
+
+        .nav-links {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                28px;
+        }
+
+
+        .nav-links a {
+
+            text-decoration:
+                none;
+
+            color:
+                #374151;
+
+            font-size:
+                15px;
+
+            font-weight:
+                500;
+
+            transition:
+                0.2s;
+        }
+
+
+        .nav-links a:hover {
+
+            color:
+                #2e7d32;
+        }
+
+
+        .nav-login {
+
+            padding:
+                10px 20px;
+
+            border-radius:
+                7px;
+
+            background:
+                #2e7d32;
+
+            color:
+                white !important;
+
+            font-weight:
+                600 !important;
+        }
+
+
+        .nav-login:hover {
+
+            background:
+                #256628;
+
+            color:
+                white !important;
+        }
+
+
+        /* =========================================
+           HERO
+        ========================================= */
+
+        .hero {
+
+            min-height:
+                510px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            text-align:
+                center;
+
+            padding:
+                80px 20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eef8f0 0%,
+                    #ffffff 50%,
+                    #edf7ef 100%
+                );
+
+            border-bottom:
+                1px solid #e3ebe4;
+        }
+
+
+        .hero-content {
+
+            max-width:
+                900px;
+        }
+
+
+        .hero-label {
+
+            display:
+                inline-block;
+
+            padding:
+                7px 15px;
+
+            margin-bottom:
+                20px;
+
+            border-radius:
+                30px;
+
+            background:
+                #e5f4e7;
+
+            color:
+                #2e7d32;
+
+            font-size:
+                13px;
+
+            font-weight:
+                700;
+
+            letter-spacing:
+                0.5px;
+        }
+
+
+        .hero h1 {
+
+            font-size:
+                clamp(40px, 6vw, 68px);
+
+            line-height:
+                1.08;
+
+            margin-bottom:
+                25px;
+
+            color:
+                #17251a;
+        }
+
+
+        .hero h1 span {
+
+            display:
+                block;
+
+            color:
+                #2e7d32;
+        }
+
+
+        .hero p {
+
+            max-width:
+                750px;
+
+            margin:
+                0 auto;
+
+            font-size:
+                19px;
+
+            color:
+                #5f6b63;
+
+            line-height:
+                1.8;
+        }
+
+
+        /* =========================================
+           GENERAL SECTION
+        ========================================= */
+
+        section {
+
+            padding:
+                80px 7%;
+        }
+
+
+        .section-heading {
+
+            max-width:
+                760px;
+
+            margin:
+                0 auto 50px;
+
+            text-align:
+                center;
+        }
+
+
+        .section-heading h2 {
+
+            font-size:
+                clamp(30px, 4vw, 42px);
+
+            margin-bottom:
+                14px;
+
+            color:
+                #17251a;
+        }
+
+
+        .section-heading p {
+
+            color:
+                #68736b;
+
+            font-size:
+                16px;
+        }
+
+
+        /* =========================================
+           WHAT IS MILKIBA
+        ========================================= */
+
+        .about-section {
+
+            background:
+                white;
+        }
+
+
+        .about-grid {
+
+            max-width:
+                1150px;
+
+            margin:
+                auto;
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1.1fr 0.9fr;
+
+            gap:
+                45px;
+
+            align-items:
+                center;
+        }
+
+
+        .about-text h3 {
+
+            font-size:
+                30px;
+
+            margin-bottom:
+                18px;
+
+            color:
+                #1b5e20;
+        }
+
+
+        .about-text p {
+
+            color:
+                #5f6b63;
+
+            margin-bottom:
+                18px;
+
+            font-size:
+                16px;
+        }
+
+
+        .about-highlight {
+
+            padding:
+                30px;
+
+            border-radius:
+                16px;
+
+            background:
+                #f3f9f4;
+
+            border:
+                1px solid #dcebdd;
+
+            box-shadow:
+                0 10px 35px rgba(34, 75, 40, 0.07);
+        }
+
+
+        .about-highlight h3 {
+
+            margin-bottom:
+                20px;
+
+            color:
+                #1b5e20;
+        }
+
+
+        .highlight-item {
+
+            display:
+                flex;
+
+            gap:
+                15px;
+
+            margin-bottom:
+                20px;
+        }
+
+
+        .highlight-item:last-child {
+
+            margin-bottom:
+                0;
+        }
+
+
+        .highlight-number {
+
+            min-width:
+                38px;
+
+            height:
+                38px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            border-radius:
+                50%;
+
+            background:
+                #2e7d32;
+
+            color:
+                white;
+
+            font-weight:
+                700;
+        }
+
+
+        .highlight-item strong {
+
+            display:
+                block;
+
+            margin-bottom:
+                3px;
+        }
+
+
+        .highlight-item p {
+
+            margin:
+                0;
+
+            font-size:
+                14px;
+
+            color:
+                #69756d;
+        }
+
+
+        /* =========================================
+           THREE ROLES
+        ========================================= */
+
+        .roles-section {
+
+            background:
+                #f5f8f6;
+        }
+
+
+        .roles {
+
+            max-width:
+                1150px;
+
+            margin:
+                auto;
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap:
+                25px;
+        }
+
+
+        .role-card {
+
+            padding:
+                32px;
+
+            background:
+                white;
+
+            border:
+                1px solid #e1e8e2;
+
+            border-radius:
+                16px;
+
+            box-shadow:
+                0 8px 30px rgba(0, 0, 0, 0.05);
+
+            transition:
+                transform 0.2s,
+                box-shadow 0.2s;
+        }
+
+
+        .role-card:hover {
+
+            transform:
+                translateY(-5px);
+
+            box-shadow:
+                0 14px 35px rgba(0, 0, 0, 0.09);
+        }
+
+
+        .role-icon {
+
+            width:
+                58px;
+
+            height:
+                58px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            border-radius:
+                14px;
+
+            background:
+                #e9f5ea;
+
+            color:
+                #2e7d32;
+
+            font-size:
+                27px;
+
+            font-weight:
+                700;
+
+            margin-bottom:
+                20px;
+        }
+
+
+        .role-card h3 {
+
+            font-size:
+                23px;
+
+            margin-bottom:
+                12px;
+
+            color:
+                #1f2933;
+        }
+
+
+        .role-card p {
+
+            color:
+                #69756d;
+
+            font-size:
+                15px;
+        }
+
+
+        .role-card ul {
+
+            margin-top:
+                18px;
+
+            padding-left:
+                19px;
+
+            color:
+                #58645c;
+
+            font-size:
+                14px;
+        }
+
+
+        .role-card li {
+
+            margin-bottom:
+                8px;
+        }
+
+
+        /* =========================================
+           HOW IT WORKS
+        ========================================= */
+
+        .process-section {
+
+            background:
+                white;
+        }
+
+
+        .process {
+
+            max-width:
+                1100px;
+
+            margin:
+                auto;
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(5, 1fr);
+
+            gap:
+                15px;
+
+            position:
+                relative;
+        }
+
+
+        .process-step {
+
+            position:
+                relative;
+
+            text-align:
+                center;
+
+            padding:
+                25px 15px;
+        }
+
+
+        .process-number {
+
+            width:
+                52px;
+
+            height:
+                52px;
+
+            margin:
+                0 auto 18px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            border-radius:
+                50%;
+
+            background:
+                #2e7d32;
+
+            color:
+                white;
+
+            font-size:
+                18px;
+
+            font-weight:
+                700;
+        }
+
+
+        .process-step h3 {
+
+            font-size:
+                17px;
+
+            margin-bottom:
+                9px;
+        }
+
+
+        .process-step p {
+
+            font-size:
+                13px;
+
+            color:
+                #69756d;
+        }
+
+
+        /* =========================================
+           DAILY SESSION
+        ========================================= */
+
+        .session-section {
+
+            background:
+                #f5f8f6;
+        }
+
+
+        .session-grid {
+
+            max-width:
+                1050px;
+
+            margin:
+                auto;
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap:
+                30px;
+        }
+
+
+        .session-card {
+
+            padding:
+                35px;
+
+            border-radius:
+                16px;
+
+            background:
+                white;
+
+            border:
+                1px solid #e1e8e2;
+
+            box-shadow:
+                0 8px 30px rgba(0, 0, 0, 0.05);
+        }
+
+
+        .session-card h3 {
+
+            font-size:
+                24px;
+
+            margin-bottom:
+                18px;
+
+            color:
+                #1b5e20;
+        }
+
+
+        .session-card p {
+
+            color:
+                #68736b;
+
+            margin-bottom:
+                18px;
+        }
+
+
+        .session-list {
+
+            list-style:
+                none;
+        }
+
+
+        .session-list li {
+
+            position:
+                relative;
+
+            padding:
+                9px 0 9px 25px;
+
+            color:
+                #4f5b52;
+
+            font-size:
+                14px;
+        }
+
+
+        .session-list li::before {
+
+            content:
+                "✓";
+
+            position:
+                absolute;
+
+            left:
+                0;
+
+            color:
+                #2e7d32;
+
+            font-weight:
+                bold;
+        }
+
+
+        /* =========================================
+           RECORDS AND PAYMENTS
+        ========================================= */
+
+        .records-section {
+
+            background:
+                white;
+        }
+
+
+        .records-grid {
+
+            max-width:
+                1150px;
+
+            margin:
+                auto;
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap:
+                20px;
+        }
+
+
+        .record-card {
+
+            padding:
+                27px;
+
+            border-radius:
+                14px;
+
+            background:
+                #f8faf8;
+
+            border:
+                1px solid #e1e8e2;
+        }
+
+
+        .record-card h3 {
+
+            font-size:
+                18px;
+
+            margin-bottom:
+                10px;
+        }
+
+
+        .record-card p {
+
+            color:
+                #68736b;
+
+            font-size:
+                14px;
+        }
+
+
+        /* =========================================
+           SECURITY
+        ========================================= */
+
+        .security-section {
+
+            background:
+                #f5f8f6;
+        }
+
+
+        .security-box {
+
+            max-width:
+                1050px;
+
+            margin:
+                auto;
+
+            padding:
+                40px;
+
+            border-radius:
+                18px;
+
+            background:
+                #ffffff;
+
+            border:
+                1px solid #dce6dd;
+
+            box-shadow:
+                0 10px 35px rgba(0, 0, 0, 0.05);
+        }
+
+
+        .security-box h2 {
+
+            font-size:
+                30px;
+
+            margin-bottom:
+                15px;
+
+            color:
+                #1b5e20;
+        }
+
+
+        .security-box > p {
+
+            color:
+                #68736b;
+
+            margin-bottom:
+                30px;
+        }
+
+
+        .security-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap:
+                25px;
+        }
+
+
+        .security-item {
+
+            padding:
+                20px;
+
+            border-radius:
+                12px;
+
+            background:
+                #f6faf7;
+        }
+
+
+        .security-item h3 {
+
+            font-size:
+                17px;
+
+            margin-bottom:
+                8px;
+        }
+
+
+        .security-item p {
+
+            font-size:
+                13px;
+
+            color:
+                #69756d;
+        }
+
+
+        /* =========================================
+           ADMIN SECTION
+        ========================================= */
+
+        .admin-section {
+
+            background:
+                white;
+        }
+
+
+        .admin-content {
+
+            max-width:
+                900px;
+
+            margin:
+                auto;
+
+            text-align:
+                center;
+        }
+
+
+        .admin-content h2 {
+
+            font-size:
+                34px;
+
+            margin-bottom:
+                15px;
+        }
+
+
+        .admin-content p {
+
+            color:
+                #68736b;
+
+            margin-bottom:
+                25px;
+        }
+
+
+        .admin-note {
+
+            display:
+                inline-block;
+
+            padding:
+                15px 22px;
+
+            border-radius:
+                10px;
+
+            background:
+                #f0f7f1;
+
+            border:
+                1px solid #d6e8d8;
+
+            color:
+                #416046;
+
+            font-size:
+                14px;
+        }
+
+
+        /* =========================================
+           CTA
+        ========================================= */
+
+        .cta-section {
+
+            padding:
+                90px 20px;
+
+            text-align:
+                center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #1b5e20,
+                    #2e7d32
+                );
+
+            color:
+                white;
+        }
+
+
+        .cta-section h2 {
+
+            font-size:
+                clamp(30px, 4vw, 43px);
+
+            margin-bottom:
+                15px;
+        }
+
+
+        .cta-section p {
+
+            max-width:
+                650px;
+
+            margin:
+                0 auto 30px;
+
+            color:
+                #e8f4e9;
+        }
+
+
+        .cta-button {
+
+            display:
+                inline-block;
+
+            padding:
+                13px 27px;
+
+            border-radius:
+                8px;
+
+            background:
+                white;
+
+            color:
+                #2e7d32;
+
+            text-decoration:
+                none;
+
+            font-weight:
+                700;
+        }
+
+
+        .cta-button:hover {
+
+            background:
+                #f0f0f0;
+        }
+
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        footer {
+
+            padding:
+                28px 20px;
+
+            text-align:
+                center;
+
+            background:
+                #17251a;
+
+            color:
+                #b9c5bb;
+
+            font-size:
+                13px;
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media (max-width: 950px) {
+
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .roles {
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .process {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+
+            .records-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+
+            .security-grid {
+                grid-template-columns:
+                    1fr;
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            .navbar {
+                height:
+                    65px;
+
+                padding:
+                    0 20px;
+            }
+
+
+            .logo {
+                font-size:
+                    21px;
+            }
+
+
+            .nav-links {
+                gap:
+                    10px;
+            }
+
+
+            .nav-links a:not(.nav-login) {
+                display:
+                    none;
+            }
+
+
+            section {
+                padding:
+                    60px 20px;
+            }
+
+
+            .hero {
+                min-height:
+                    470px;
+
+                padding:
+                    60px 20px;
+            }
+
+
+            .hero p {
+                font-size:
+                    16px;
+            }
+
+
+            .session-grid {
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .records-grid {
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .process {
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .security-box {
+                padding:
+                    25px;
+            }
+
+
+            .cta-section {
+                padding:
+                    70px 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         NAVIGATION
+    ========================================== -->
+
+    <header class="navbar">
+
+        <div class="logo">
+            MILKIBA
+        </div>
+
+
+        <nav class="nav-links">
+
+            <a href="./index.html">
+                Home
+            </a>
+
+            <a href="./about.html">
+                About
+            </a>
+
+            <a href="./contact.html">
+                Contact
+            </a>
+
+            <a href="./admin.html">
+                Admin
+            </a>
+
+            <a
+                href="./login.html"
+                class="nav-login"
+            >
+                Login
+            </a>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- =========================================
+         HERO
+    ========================================== -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <span class="hero-label">
+                ABOUT MILKIBA
+            </span>
+
+            <h1>
+                A Simple Way to
+                <span>Manage Milk Transactions</span>
+            </h1>
+
+            <p>
+                MILKIBA is a digital milk marketplace designed
+                to connect vendors, sellers and buyers in one
+                organized platform. It helps manage daily milk
+                collection, supply, sales, quantities, rates,
+                payments and transaction history.
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         WHAT IS MILKIBA
+    ========================================== -->
+
+    <section class="about-section">
+
+        <div class="section-heading">
+
+            <h2>
+                What is MILKIBA?
+            </h2>
+
+            <p>
+                A centralized platform for managing
+                the complete milk transaction process.
+            </p>
+
+        </div>
+
+
+        <div class="about-grid">
+
+
+            <div class="about-text">
+
+                <h3>
+                    Built for a connected milk marketplace
+                </h3>
+
+                <p>
+                    Traditional milk transactions can involve
+                    handwritten records, manual calculations,
+                    repeated communication and difficulty
+                    tracking previous transactions.
+                </p>
+
+                <p>
+                    MILKIBA provides a digital platform where
+                    the different participants can work together
+                    while maintaining their own responsibilities.
+                </p>
+
+                <p>
+                    The system is organized around three main
+                    roles: <strong>Vendor, Seller and Buyer.</strong>
+                    Each role has its own dashboard and functions.
+                </p>
+
+            </div>
+
+
+            <div class="about-highlight">
+
+                <h3>
+                    What MILKIBA manages
+                </h3>
+
+
+                <div class="highlight-item">
+
+                    <div class="highlight-number">
+                        1
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Milk Quantity
+                        </strong>
+
+                        <p>
+                            Record the quantity collected,
+                            supplied or sold.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="highlight-item">
+
+                    <div class="highlight-number">
+                        2
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Milk Rate
+                        </strong>
+
+                        <p>
+                            Record the applicable rate
+                            for each transaction.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="highlight-item">
+
+                    <div class="highlight-number">
+                        3
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Payments
+                        </strong>
+
+                        <p>
+                            Maintain payment-related
+                            transaction information.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="highlight-item">
+
+                    <div class="highlight-number">
+                        4
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            History
+                        </strong>
+
+                        <p>
+                            Keep date-wise transaction
+                            records for future reference.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         THREE ROLES
+    ========================================== -->
+
+    <section class="roles-section">
+
+        <div class="section-heading">
+
+            <h2>
+                Three Roles. One Platform.
+            </h2>
+
+            <p>
+                MILKIBA separates responsibilities while
+                keeping the complete transaction flow connected.
+            </p>
+
+        </div>
+
+
+        <div class="roles">
+
+
+            <div class="role-card">
+
+                <div class="role-icon">
+                    V
+                </div>
+
+                <h3>
+                    Vendor
+                </h3>
+
+                <p>
+                    The Vendor manages the operational
+                    side of the marketplace and records
+                    the actual milk transactions.
+                </p>
+
+                <ul>
+
+                    <li>
+                        Manage buyers and sellers
+                    </li>
+
+                    <li>
+                        Record collected milk
+                    </li>
+
+                    <li>
+                        Set transaction rates
+                    </li>
+
+                    <li>
+                        Manage milk supply and sales
+                    </li>
+
+                    <li>
+                        Correct previous records
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+
+            <div class="role-card">
+
+                <div class="role-icon">
+                    S
+                </div>
+
+                <h3>
+                    Seller
+                </h3>
+
+                <p>
+                    Sellers provide milk to the Vendor
+                    and can view their transaction
+                    information through their dashboard.
+                </p>
+
+                <ul>
+
+                    <li>
+                        View milk collection records
+                    </li>
+
+                    <li>
+                        View applicable rates
+                    </li>
+
+                    <li>
+                        Track transaction history
+                    </li>
+
+                    <li>
+                        Receive relevant notifications
+                    </li>
+
+                    <li>
+                        Respond to record changes
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+
+            <div class="role-card">
+
+                <div class="role-icon">
+                    B
+                </div>
+
+                <h3>
+                    Buyer
+                </h3>
+
+                <p>
+                    Buyers purchase available milk and
+                    can view their transaction details
+                    and history.
+                </p>
+
+                <ul>
+
+                    <li>
+                        View milk purchase records
+                    </li>
+
+                    <li>
+                        View quantity and rate
+                    </li>
+
+                    <li>
+                        Track payment information
+                    </li>
+
+                    <li>
+                        Receive relevant notifications
+                    </li>
+
+                    <li>
+                        Review transaction history
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         HOW IT WORKS
+    ========================================== -->
+
+    <section class="process-section">
+
+        <div class="section-heading">
+
+            <h2>
+                How MILKIBA Works
+            </h2>
+
+            <p>
+                The complete transaction process can be
+                organized into a simple sequence.
+            </p>
+
+        </div>
+
+
+        <div class="process">
+
+
+            <div class="process-step">
+
+                <div class="process-number">
+                    1
+                </div>
+
+                <h3>
+                    Collection
+                </h3>
+
+                <p>
+                    Vendor records the milk
+                    collected from the seller.
+                </p>
+
+            </div>
+
+
+            <div class="process-step">
+
+                <div class="process-number">
+                    2
+                </div>
+
+                <h3>
+                    Quantity
+                </h3>
+
+                <p>
+                    The actual milk quantity
+                    is recorded.
+                </p>
+
+            </div>
+
+
+            <div class="process-step">
+
+                <div class="process-number">
+                    3
+                </div>
+
+                <h3>
+                    Rate
+                </h3>
+
+                <p>
+                    The applicable rate is
+                    recorded for the transaction.
+                </p>
+
+            </div>
+
+
+            <div class="process-step">
+
+                <div class="process-number">
+                    4
+                </div>
+
+                <h3>
+                    Sale
+                </h3>
+
+                <p>
+                    Milk can be supplied or
+                    sold to the buyer.
+                </p>
+
+            </div>
+
+
+            <div class="process-step">
+
+                <div class="process-number">
+                    5
+                </div>
+
+                <h3>
+                    History
+                </h3>
+
+                <p>
+                    The transaction remains
+                    available for future reference.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         MORNING / EVENING
+    ========================================== -->
+
+    <section class="session-section">
+
+        <div class="section-heading">
+
+            <h2>
+                Morning & Evening Sessions
+            </h2>
+
+            <p>
+                MILKIBA can organize daily milk operations
+                into separate sessions.
+            </p>
+
+        </div>
+
+
+        <div class="session-grid">
+
+
+            <div class="session-card">
+
+                <h3>
+                    Morning Session
+                </h3>
+
+                <p>
+                    The morning session can be used to
+                    record the first milk collection,
+                    supply and transaction activities of
+                    the day.
+                </p>
+
+                <ul class="session-list">
+
+                    <li>
+                        Seller milk collection
+                    </li>
+
+                    <li>
+                        Quantity recording
+                    </li>
+
+                    <li>
+                        Rate entry
+                    </li>
+
+                    <li>
+                        Buyer supply
+                    </li>
+
+                    <li>
+                        Payment information
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+
+            <div class="session-card">
+
+                <h3>
+                    Evening Session
+                </h3>
+
+                <p>
+                    The evening session provides a separate
+                    record for the second operational period
+                    of the day.
+                </p>
+
+                <ul class="session-list">
+
+                    <li>
+                        Evening milk collection
+                    </li>
+
+                    <li>
+                        Quantity recording
+                    </li>
+
+                    <li>
+                        Rate entry
+                    </li>
+
+                    <li>
+                        Buyer supply
+                    </li>
+
+                    <li>
+                        Payment information
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         RECORDS
+    ========================================== -->
+
+    <section class="records-section">
+
+        <div class="section-heading">
+
+            <h2>
+                Organized Transaction Records
+            </h2>
+
+            <p>
+                Important transaction information can be
+                maintained in a structured way.
+            </p>
+
+        </div>
+
+
+        <div class="records-grid">
+
+
+            <div class="record-card">
+
+                <h3>
+                    Quantity
+                </h3>
+
+                <p>
+                    Record the actual quantity of milk
+                    collected or supplied.
+                </p>
+
+            </div>
+
+
+            <div class="record-card">
+
+                <h3>
+                    Rate
+                </h3>
+
+                <p>
+                    Record the rate associated with
+                    the particular transaction.
+                </p>
+
+            </div>
+
+
+            <div class="record-card">
+
+                <h3>
+                    Total Amount
+                </h3>
+
+                <p>
+                    Transaction amount can be calculated
+                    using quantity × applicable rate.
+                </p>
+
+            </div>
+
+
+            <div class="record-card">
+
+                <h3>
+                    Date & Session
+                </h3>
+
+                <p>
+                    Records can be associated with a
+                    specific date and morning/evening session.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         SECURITY
+    ========================================== -->
+
+    <section class="security-section">
+
+        <div class="section-heading">
+
+            <h2>
+                Account & Data Management
+            </h2>
+
+            <p>
+                MILKIBA separates user access according
+                to account roles and responsibilities.
+            </p>
+
+        </div>
+
+
+        <div class="security-box">
+
+            <h2>
+                Controlled Access
+            </h2>
+
+            <p>
+                Users access the platform using their
+                registered accounts. Different roles
+                receive different dashboards and
+                responsibilities.
+            </p>
+
+
+            <div class="security-grid">
+
+
+                <div class="security-item">
+
+                    <h3>
+                        Authentication
+                    </h3>
+
+                    <p>
+                        Users authenticate through their
+                        registered MILKIBA accounts.
+                    </p>
+
+                </div>
+
+
+                <div class="security-item">
+
+                    <h3>
+                        Role-Based Access
+                    </h3>
+
+                    <p>
+                        Buyer, Seller and Vendor accounts
+                        are handled separately.
+                    </p>
+
+                </div>
+
+
+                <div class="security-item">
+
+                    <h3>
+                        Admin Management
+                    </h3>
+
+                    <p>
+                        Administrative functions are
+                        separated from normal user accounts.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         ADMIN
+    ========================================== -->
+
+    <section class="admin-section">
+
+        <div class="admin-content">
+
+            <h2>
+                MILKIBA Administration
+            </h2>
+
+            <p>
+                The Admin area is designed for authorized
+                administrative operations such as reviewing
+                password reset requests and managing
+                administrative actions.
+            </p>
+
+            <div class="admin-note">
+
+                Admin access is restricted to the
+                authorized administrator account.
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         CALL TO ACTION
+    ========================================== -->
+
+    <section class="cta-section">
+
+        <h2>
+            Everything in One Place
+        </h2>
+
+        <p>
+            MILKIBA brings Vendors, Sellers and Buyers
+            together with a structured digital workflow
+            for managing daily milk transactions.
+        </p>
+
+
+        <a
+            href="./login.html"
+            class="cta-button"
+        >
+            Login to MILKIBA
+        </a>
+
+    </section>
+
+
+
+    <!-- =========================================
+         FOOTER
+    ========================================== -->
+
+    <footer>
+
+        <p>
+            © 2026 MILKIBA. Milk Marketplace.
+        </p>
+
+    </footer>
+
+
+</body>
+
+</html>

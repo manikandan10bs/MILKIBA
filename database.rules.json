@@ -1,0 +1,374 @@
+{
+  "rules": {
+
+    "users": {
+      ".read": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'vendor'",
+
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || root.child('users').child(auth.uid).child('role').val() === 'vendor')",
+
+        ".write": "auth != null && auth.uid === $uid",
+
+        ".validate": "newData.hasChildren(['email', 'role'])",
+
+        "email": {
+          ".validate": "newData.isString() && newData.val().length > 3 && newData.val().length < 200"
+        },
+
+        "role": {
+          ".validate": "newData.isString() && (newData.val() === 'buyer' || newData.val() === 'seller' || newData.val() === 'vendor')"
+        }
+      }
+    },
+
+
+    "sellerNotifications": {
+      ".read": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'vendor' || root.child('users').child(auth.uid).child('role').val() === 'seller')",
+
+      "$notificationId": {
+        ".write": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'vendor' || (root.child('users').child(auth.uid).child('role').val() === 'seller' && newData.child('sellerId').val() === auth.uid))",
+
+        ".validate": "newData.hasChildren(['sellerId', 'sellerName', 'date', 'session', 'milkAvailable', 'estimatedQuantity', 'updatedAt'])",
+
+        "sellerId": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+
+        "sellerName": {
+          ".validate": "newData.isString()"
+        },
+
+        "date": {
+          ".validate": "newData.isString()"
+        },
+
+        "session": {
+          ".validate": "newData.isString() && (newData.val() === 'morning' || newData.val() === 'evening')"
+        },
+
+        "milkAvailable": {
+          ".validate": "newData.isBoolean() || newData.isNumber()"
+        },
+
+        "estimatedQuantity": {
+          ".validate": "newData.isNumber()"
+        },
+
+        "updatedAt": {
+          ".validate": "newData.isString()"
+        }
+      }
+    },
+
+
+    "buyerNotifications": {
+      ".read": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'vendor' || root.child('users').child(auth.uid).child('role').val() === 'buyer')",
+
+      "$notificationId": {
+        ".write": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'vendor' || (root.child('users').child(auth.uid).child('role').val() === 'buyer' && newData.child('buyerId').val() === auth.uid))",
+
+        ".validate": "newData.hasChildren(['buyerId', 'buyerName', 'date', 'session', 'milkRequired', 'requestedQuantity', 'updatedAt'])",
+
+        "buyerId": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+
+        "buyerName": {
+          ".validate": "newData.isString()"
+        },
+
+        "date": {
+          ".validate": "newData.isString()"
+        },
+
+        "session": {
+          ".validate": "newData.isString() && (newData.val() === 'morning' || newData.val() === 'evening')"
+        },
+
+        "milkRequired": {
+          ".validate": "newData.isBoolean() || newData.isNumber()"
+        },
+
+        "requestedQuantity": {
+          ".validate": "newData.isNumber()"
+        },
+
+        "updatedAt": {
+          ".validate": "newData.isString()"
+        }
+      }
+    },
+
+
+    "milkCollections": {
+      ".read": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'vendor' || root.child('users').child(auth.uid).child('role').val() === 'seller')",
+
+      "$transactionId": {
+        ".write": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'vendor' || (root.child('users').child(auth.uid).child('role').val() === 'seller' && data.child('sellerId').val() === auth.uid))",
+
+        ".validate": "newData.hasChildren(['sellerId', 'sellerName', 'vendorId', 'date', 'session', 'estimatedQuantity', 'actualQuantity', 'quality', 'qualityNote', 'rate', 'totalAmount', 'paymentAmount', 'pendingAmount', 'paymentStatus', 'paymentMethod', 'paymentDate', 'paymentNote', 'recordStatus', 'transactionStatus', 'createdAt', 'updatedAt'])",
+
+        "sellerId": {
+          ".validate": "newData.isString()"
+        },
+
+        "sellerName": {
+          ".validate": "newData.isString()"
+        },
+
+        "vendorId": {
+          ".validate": "newData.isString()"
+        },
+
+        "date": {
+          ".validate": "newData.isString()"
+        },
+
+        "session": {
+          ".validate": "newData.isString() && (newData.val() === 'morning' || newData.val() === 'evening')"
+        },
+
+        "estimatedQuantity": {
+          ".validate": "newData.isNumber()"
+        },
+
+        "actualQuantity": {
+          ".validate": "newData.isNumber()"
+        },
+
+        "quality": {
+          ".validate": "newData.isString()"
+        },
+
+        "qualityNote": {
+          ".validate": "newData.isString()"
+        },
+
+        "rate": {
+          ".validate": "newData.isNumber()"
+        },
+
+        "totalAmount": {
+          ".validate": "newData.isNumber()"
+        },
+
+        "paymentAmount": {
+          ".validate": "newData.isNumber()"
+        },
+
+        "pendingAmount": {
+          ".validate": "newData.isNumber()"
+        },
+
+        "paymentStatus": {
+          ".validate": "newData.isString() && (newData.val() === 'Paid' || newData.val() === 'Partial' || newData.val() === 'Not Paid')"
+        },
+
+        "paymentMethod": {
+          ".validate": "newData.isString()"
+        },
+
+        "paymentDate": {
+          ".validate": "newData.isString()"
+        },
+
+        "paymentNote": {
+          ".validate": "newData.isString()"
+        },
+
+        "recordStatus": {
+          ".validate": "newData.isString() && (newData.val() === 'Active' || newData.val() === 'Deleted')"
+        },
+
+        "transactionStatus": {
+          ".validate": "newData.isString() && newData.val() === 'Collected'"
+        },
+
+        "createdAt": {
+          ".validate": "newData.isString()"
+        },
+
+        "updatedAt": {
+          ".validate": "newData.isString()"
+        }
+      }
+    },
+
+
+    "milkSupplies": {
+      ".read": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'vendor' || root.child('users').child(auth.uid).child('role').val() === 'buyer' || root.child('users').child(auth.uid).child('role').val() === 'seller')",
+
+      "$transactionId": {
+        ".write": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'vendor' || (root.child('users').child(auth.uid).child('role').val() === 'buyer' && data.child('buyerId').val() === auth.uid))",
+
+        ".validate": "newData.hasChildren(['buyerId', 'buyerName', 'vendorId', 'date', 'session', 'requestedQuantity', 'suppliedQuantity', 'rate', 'totalAmount', 'paymentAmount', 'pendingAmount', 'paymentStatus', 'paymentMethod', 'paymentDate', 'paymentNote', 'recordStatus', 'transactionStatus', 'createdAt', 'updatedAt'])",
+
+        "buyerId": {
+          ".validate": "newData.isString()"
+        },
+
+        "buyerName": {
+          ".validate": "newData.isString()"
+        },
+
+        "vendorId": {
+          ".validate": "newData.isString()"
+        },
+
+        "date": {
+          ".validate": "newData.isString()"
+        },
+
+        "session": {
+          ".validate": "newData.isString() && (newData.val() === 'morning' || newData.val() === 'evening')"
+        },
+
+        "requestedQuantity": {
+          ".validate": "newData.isNumber()"
+        },
+
+        "suppliedQuantity": {
+          ".validate": "newData.isNumber()"
+        },
+
+        "rate": {
+          ".validate": "newData.isNumber()"
+        },
+
+        "totalAmount": {
+          ".validate": "newData.isNumber()"
+        },
+
+        "paymentAmount": {
+          ".validate": "newData.isNumber()"
+        },
+
+        "pendingAmount": {
+          ".validate": "newData.isNumber()"
+        },
+
+        "paymentStatus": {
+          ".validate": "newData.isString() && (newData.val() === 'Paid' || newData.val() === 'Partial' || newData.val() === 'Not Paid')"
+        },
+
+        "paymentMethod": {
+          ".validate": "newData.isString()"
+        },
+
+        "paymentDate": {
+          ".validate": "newData.isString()"
+        },
+
+        "paymentNote": {
+          ".validate": "newData.isString()"
+        },
+
+        "recordStatus": {
+          ".validate": "newData.isString() && (newData.val() === 'Active' || newData.val() === 'Deleted')"
+        },
+
+        "transactionStatus": {
+          ".validate": "newData.isString() && newData.val() === 'Supplied'"
+        },
+
+        "createdAt": {
+          ".validate": "newData.isString()"
+        },
+
+        "updatedAt": {
+          ".validate": "newData.isString()"
+        }
+      }
+    },
+
+
+    "changeRequests": {
+      ".read": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'vendor' || root.child('users').child(auth.uid).child('role').val() === 'seller' || root.child('users').child(auth.uid).child('role').val() === 'buyer')",
+
+      "$requestId": {
+        ".write": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'vendor' || (root.child('users').child(auth.uid).child('role').val() === 'seller' && data.child('targetUserId').val() === auth.uid) || (root.child('users').child(auth.uid).child('role').val() === 'buyer' && data.child('targetUserId').val() === auth.uid) || (!data.exists() && root.child('users').child(auth.uid).child('role').val() === 'vendor' && newData.child('vendorId').val() === auth.uid))",
+
+        ".validate": "newData.hasChildren(['type', 'transactionType', 'transactionId', 'vendorId', 'targetUserId', 'reason', 'status', 'createdAt'])",
+
+        "type": {
+          ".validate": "newData.isString() && (newData.val() === 'edit' || newData.val() === 'delete')"
+        },
+
+        "transactionType": {
+          ".validate": "newData.isString() && (newData.val() === 'collection' || newData.val() === 'supply')"
+        },
+
+        "transactionId": {
+          ".validate": "newData.isString()"
+        },
+
+        "vendorId": {
+          ".validate": "newData.isString()"
+        },
+
+        "targetUserId": {
+          ".validate": "newData.isString()"
+        },
+
+        "reason": {
+          ".validate": "newData.isString()"
+        },
+
+        "status": {
+          ".validate": "newData.isString() && (newData.val() === 'Pending' || newData.val() === 'Approved' || newData.val() === 'Rejected')"
+        },
+
+        "createdAt": {
+          ".validate": "newData.isString()"
+        },
+
+        "oldData": {
+          ".validate": "newData.exists()"
+        },
+
+        "newData": {
+          ".validate": "newData.exists()"
+        }
+      }
+    },
+
+
+    "passwordResetRequests": {
+      ".read": "auth != null && auth.token.email != null && auth.token.email.toLowerCase() === 'akashchinnaswamy2712@gmail.com'",
+
+      "$requestId": {
+        ".write": "(!data.exists() && newData.exists() && newData.child('status').val() === 'Pending') || (auth != null && auth.token.email != null && auth.token.email.toLowerCase() === 'akashchinnaswamy2712@gmail.com')",
+
+        ".validate": "newData.hasChildren(['email', 'role', 'reason', 'status', 'createdAt'])",
+
+        "email": {
+          ".validate": "newData.isString() && newData.val().length > 3 && newData.val().length < 200"
+        },
+
+        "role": {
+          ".validate": "newData.isString() && (newData.val() === 'buyer' || newData.val() === 'seller' || newData.val() === 'vendor')"
+        },
+
+        "reason": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length < 1000"
+        },
+
+        "status": {
+          ".validate": "newData.isString() && (newData.val() === 'Pending' || newData.val() === 'Reviewed')"
+        },
+
+        "createdAt": {
+          ".validate": "newData.isString()"
+        },
+
+        "reviewedAt": {
+          ".validate": "newData.isString()"
+        },
+
+        "reviewedBy": {
+          ".validate": "newData.isString()"
+        }
+      }
+    }
+  }
+}

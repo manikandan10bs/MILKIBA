@@ -1,0 +1,1593 @@
+/* =========================================================
+   MILKIBA VENDOR DASHBOARD
+   Responsive + Animated CSS
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+body {
+    width: 100%;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: #f5f7fb;
+    color: #222;
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   COMMON
+========================================================= */
+
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+}
+
+button {
+    touch-action: manipulation;
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+input,
+select,
+textarea {
+    outline: none;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #16803c !important;
+    box-shadow: 0 0 0 3px rgba(22, 128, 60, 0.12);
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.vendor-page {
+    min-height: 100vh;
+    width: 100%;
+}
+
+.vendor-main {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 25px;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.vendor-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+    animation: fadeDown 0.5s ease both;
+}
+
+.vendor-header h1 {
+    margin: 0 0 5px;
+    font-size: 30px;
+    line-height: 1.2;
+}
+
+.vendor-header p {
+    margin: 4px 0;
+    color: #6b7280;
+}
+
+.vendor-user-name {
+    font-weight: 700;
+    color: #16803c;
+}
+
+
+/* =========================================================
+   CONTROLS
+========================================================= */
+
+.vendor-controls {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.vendor-controls label {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.vendor-controls input {
+    min-height: 42px;
+    padding: 9px 11px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: white;
+}
+
+
+/* =========================================================
+   SESSION BUTTONS
+========================================================= */
+
+.session-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.session-buttons button {
+    min-height: 42px;
+    padding: 9px 16px;
+    border: 1px solid #d1d5db;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.session-buttons button:hover {
+    transform: translateY(-2px);
+}
+
+.session-buttons button.active {
+    background: #16803c;
+    color: white;
+    border-color: #16803c;
+
+    box-shadow:
+        0 4px 12px rgba(22, 128, 60, 0.25);
+
+    animation: activePulse 2s infinite;
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+.logout-btn {
+    min-height: 42px;
+    border: none;
+    border-radius: 8px;
+    padding: 9px 16px;
+    background: #dc2626;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.logout-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(220, 38, 38, 0.25);
+}
+
+
+/* =========================================================
+   SUMMARY
+========================================================= */
+
+.vendor-summary {
+    display: grid;
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+
+/* =========================================================
+   SUMMARY CARD
+========================================================= */
+
+.summary-card {
+    min-width: 0;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 18px;
+
+    box-shadow:
+        0 3px 12px rgba(0, 0, 0, 0.07);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+
+    animation: cardAppear 0.5s ease both;
+}
+
+.summary-card:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.summary-card:nth-child(2) {
+    animation-delay: 0.10s;
+}
+
+.summary-card:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+.summary-card:nth-child(4) {
+    animation-delay: 0.20s;
+}
+
+.summary-card:nth-child(5) {
+    animation-delay: 0.25s;
+}
+
+.summary-card:nth-child(6) {
+    animation-delay: 0.30s;
+}
+
+.summary-card:nth-child(7) {
+    animation-delay: 0.35s;
+}
+
+.summary-card:nth-child(8) {
+    animation-delay: 0.40s;
+}
+
+.summary-card:nth-child(9) {
+    animation-delay: 0.45s;
+}
+
+.summary-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 8px 22px rgba(0, 0, 0, 0.10);
+}
+
+.summary-card h3 {
+    margin: 0 0 9px;
+    color: #6b7280;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.summary-card .summary-value {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.2;
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   ACTIVITY GRID
+========================================================= */
+
+.activity-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    width: 100%;
+    min-width: 0;
+}
+
+
+/* =========================================================
+   ACTIVITY SECTION
+========================================================= */
+
+.activity-section {
+    min-width: 0;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 20px;
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.07);
+
+    animation: slideUp 0.55s ease both;
+}
+
+.activity-section:nth-child(2) {
+    animation-delay: 0.12s;
+}
+
+.activity-section h2 {
+    margin: 0 0 7px;
+    font-size: 20px;
+}
+
+.activity-section > p {
+    margin-top: 0;
+}
+
+
+/* =========================================================
+   PERSON LIST
+========================================================= */
+
+.person-list {
+    display: grid;
+    gap: 12px;
+    width: 100%;
+}
+
+
+/* =========================================================
+   PERSON CARD
+========================================================= */
+
+.person-card {
+    width: 100%;
+    min-width: 0;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 15px;
+    background: #ffffff;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+
+    animation: cardAppear 0.45s ease both;
+}
+
+.person-card:hover {
+    transform: translateY(-3px);
+    border-color: #cbd5e1;
+
+    box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =========================================================
+   PERSON TOP
+========================================================= */
+
+.person-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.person-name {
+    font-size: 16px;
+    font-weight: 700;
+    word-break: break-word;
+}
+
+.person-email {
+    color: #6b7280;
+    font-size: 13px;
+    margin-top: 4px;
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   NOTIFICATION
+========================================================= */
+
+.notification {
+    margin-top: 12px;
+    padding: 11px;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.4;
+    word-break: break-word;
+
+    transition:
+        transform 0.2s ease;
+}
+
+.notification:hover {
+    transform: translateX(3px);
+}
+
+.notification strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.notification.yes {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.notification.no {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.notification.none {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.action-row {
+    margin-top: 13px;
+
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.primary-btn,
+.secondary-btn,
+.danger-btn,
+.edit-btn,
+.download-btn {
+    min-height: 40px;
+    padding: 9px 13px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.primary-btn:hover,
+.secondary-btn:hover,
+.danger-btn:hover,
+.edit-btn:hover,
+.download-btn:hover {
+    transform: translateY(-2px);
+}
+
+.primary-btn {
+    background: #16803c;
+    color: white;
+}
+
+.primary-btn:hover {
+    box-shadow: 0 5px 12px rgba(22, 128, 60, 0.25);
+}
+
+.secondary-btn {
+    background: #e5e7eb;
+    color: #111827;
+}
+
+.danger-btn {
+    background: #dc2626;
+    color: white;
+}
+
+.danger-btn:hover {
+    box-shadow: 0 5px 12px rgba(220, 38, 38, 0.25);
+}
+
+.edit-btn {
+    background: #2563eb;
+    color: white;
+}
+
+.edit-btn:hover {
+    box-shadow: 0 5px 12px rgba(37, 99, 235, 0.25);
+}
+
+.download-btn {
+    background: #7c3aed;
+    color: white;
+}
+
+.download-btn:hover {
+    box-shadow: 0 5px 12px rgba(124, 58, 237, 0.25);
+}
+
+
+/* =========================================================
+   HISTORY
+   NORMAL HORIZONTAL SCROLL
+========================================================= */
+
+#milkibaHistoryWrapper {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-top: 25px;
+    overflow: visible;
+}
+
+.milkiba-history-section {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    background: #ffffff;
+
+    border-radius: 14px;
+
+    padding: 20px;
+
+    margin-bottom: 25px;
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.08);
+
+    max-height: 65vh;
+
+    /*
+     * IMPORTANT:
+     * The history card itself scrolls horizontally.
+     * No external buttons are required.
+     */
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+
+    -webkit-overflow-scrolling: touch;
+
+    overscroll-behavior: contain;
+
+    scrollbar-width: auto;
+}
+
+.milkiba-history-section::-webkit-scrollbar {
+    width: 8px;
+    height: 10px;
+}
+
+.milkiba-history-section::-webkit-scrollbar-thumb {
+    background: #9ca3af;
+    border-radius: 10px;
+}
+
+.milkiba-history-section::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+}
+
+
+/* =========================================================
+   HISTORY TITLE
+========================================================= */
+
+.milkiba-history-title {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 10px;
+
+    flex-wrap: wrap;
+}
+
+.milkiba-history-title h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.milkiba-history-date {
+    font-size: 13px;
+    color: #666;
+}
+
+
+/* =========================================================
+   MILKIBA HISTORY TABLE
+========================================================= */
+
+.milkiba-history-table {
+    width: max-content !important;
+
+    /*
+     * Force the table to be wider than a mobile screen.
+     * This creates the horizontal scrollbar.
+     */
+    min-width: 1100px !important;
+
+    border-collapse: collapse;
+}
+
+.milkiba-history-table th {
+    background: #f4f6f8;
+
+    padding: 12px;
+
+    text-align: left;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    border-bottom: 1px solid #ddd;
+
+    white-space: nowrap;
+
+    position: sticky;
+    top: 0;
+
+    z-index: 2;
+}
+
+.milkiba-history-table td {
+    padding: 12px;
+
+    border-bottom: 1px solid #eee;
+
+    font-size: 13px;
+
+    vertical-align: middle;
+
+    white-space: nowrap;
+}
+
+.milkiba-history-table tr:hover {
+    background: #fafafa;
+}
+
+
+/* =========================================================
+   OLD HISTORY SUPPORT
+========================================================= */
+
+.history-container {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    max-height: 65vh;
+
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+
+    -webkit-overflow-scrolling: touch;
+
+    overscroll-behavior: contain;
+
+    border-radius: 10px;
+
+    scrollbar-width: auto;
+}
+
+.history-container::-webkit-scrollbar {
+    width: 8px;
+    height: 10px;
+}
+
+.history-container::-webkit-scrollbar-thumb {
+    background: #9ca3af;
+    border-radius: 10px;
+}
+
+.history-container::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+}
+
+.history-table {
+    width: max-content !important;
+
+    min-width: 1100px !important;
+
+    border-collapse: collapse;
+}
+
+.history-table th,
+.history-table td {
+    padding: 11px;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    text-align: left;
+
+    white-space: nowrap;
+}
+
+.history-table th {
+    background: #f9fafb;
+    font-size: 13px;
+}
+
+.history-table td {
+    font-size: 13px;
+}
+
+.history-table tbody tr {
+    transition:
+        background 0.2s ease;
+}
+
+.history-table tbody tr:hover {
+    background: #f9fafb;
+}
+
+
+/* =========================================================
+   STATUS BADGES
+========================================================= */
+
+.status-badge {
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+.status-paid {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-partial {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-unpaid {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.status-deleted {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.request-badge {
+    display: inline-block;
+
+    background: #fef3c7;
+    color: #92400e;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   EMPTY / LOADING
+========================================================= */
+
+.empty,
+.loading {
+    color: #6b7280;
+
+    padding: 20px 0;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   LOADING ANIMATION
+========================================================= */
+
+.loading::after {
+    content: "...";
+
+    display: inline-block;
+
+    width: 20px;
+
+    animation: loadingDots 1.2s infinite;
+}
+
+@keyframes loadingDots {
+
+    0% {
+        opacity: 0.2;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.2;
+    }
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+.message {
+    margin-top: 12px;
+    color: #dc2626;
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal {
+    position: fixed;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    padding: 15px;
+
+    z-index: 1000;
+
+    animation: modalBackground 0.2s ease both;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: white;
+
+    width: 100%;
+
+    max-width: 520px;
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    padding: 25px;
+
+    border-radius: 14px;
+
+    animation: modalAppear 0.3s ease both;
+}
+
+.modal-header {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+.close-btn {
+    border: none;
+
+    background: transparent;
+
+    font-size: 28px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease;
+}
+
+.close-btn:hover {
+    transform: rotate(90deg);
+}
+
+
+/* =========================================================
+   MODAL FORM
+========================================================= */
+
+.modal-content label {
+    display: block;
+
+    font-weight: 600;
+
+    margin-top: 14px;
+    margin-bottom: 6px;
+}
+
+.modal-content input,
+.modal-content select,
+.modal-content textarea {
+    width: 100%;
+
+    padding: 11px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 8px;
+
+    font: inherit;
+}
+
+.modal-content textarea {
+    min-height: 80px;
+
+    resize: vertical;
+}
+
+.modal-content button.primary-btn,
+.modal-content button.danger-btn {
+    margin-top: 18px;
+
+    width: 100%;
+}
+
+input[readonly] {
+    background: #f3f4f6;
+}
+
+
+/* =========================================================
+   FORM BUTTONS
+========================================================= */
+
+.btn-primary,
+.btn-success,
+.btn-danger,
+.btn-secondary {
+    min-height: 42px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 10px 16px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.btn-primary {
+    background: #2563eb;
+    color: white;
+}
+
+.btn-success {
+    background: #16a34a;
+    color: white;
+}
+
+.btn-danger {
+    background: #dc2626;
+    color: white;
+}
+
+.btn-secondary {
+    background: #e5e7eb;
+    color: #111827;
+}
+
+.btn-primary:hover,
+.btn-success:hover,
+.btn-danger:hover,
+.btn-secondary:hover {
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes fadeDown {
+
+    from {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+@keyframes slideUp {
+
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+@keyframes cardAppear {
+
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+@keyframes modalBackground {
+
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+@keyframes modalAppear {
+
+    from {
+        opacity: 0;
+        transform: translateY(25px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+@keyframes activePulse {
+
+    0% {
+        box-shadow:
+            0 4px 12px rgba(22, 128, 60, 0.20);
+    }
+
+    50% {
+        box-shadow:
+            0 4px 18px rgba(22, 128, 60, 0.35);
+    }
+
+    100% {
+        box-shadow:
+            0 4px 12px rgba(22, 128, 60, 0.20);
+    }
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .vendor-main {
+        padding: 20px;
+    }
+
+    .vendor-summary {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+}
+
+
+/* =========================================================
+   SMALL TABLET
+========================================================= */
+
+@media (max-width: 850px) {
+
+    .vendor-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .vendor-controls {
+        width: 100%;
+
+        justify-content: flex-start;
+
+        align-items: stretch;
+    }
+
+    .vendor-controls label {
+        flex: 1;
+    }
+
+    .vendor-controls input {
+        width: 100%;
+    }
+
+    .activity-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .vendor-summary {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .vendor-main {
+        padding: 12px;
+    }
+
+
+    /* HEADER */
+
+    .vendor-header {
+        gap: 14px;
+        margin-bottom: 17px;
+    }
+
+    .vendor-header h1 {
+        font-size: 25px;
+    }
+
+    .vendor-header p {
+        font-size: 14px;
+    }
+
+
+    /* CONTROLS */
+
+    .vendor-controls {
+        width: 100%;
+
+        display: grid;
+
+        grid-template-columns: 1fr;
+
+        gap: 9px;
+    }
+
+    .vendor-controls label {
+        width: 100%;
+    }
+
+    .vendor-controls input {
+        width: 100%;
+        min-height: 44px;
+    }
+
+
+    /* SESSION */
+
+    .session-buttons {
+        width: 100%;
+
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 8px;
+    }
+
+    .session-buttons button {
+        width: 100%;
+        min-height: 44px;
+    }
+
+
+    /* LOGOUT */
+
+    .logout-btn {
+        width: 100%;
+        min-height: 44px;
+    }
+
+
+    /* SUMMARY */
+
+    .vendor-summary {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 10px;
+
+        margin-bottom: 18px;
+    }
+
+    .summary-card {
+        padding: 14px;
+        border-radius: 11px;
+    }
+
+    .summary-card h3 {
+        font-size: 12px;
+        margin-bottom: 7px;
+    }
+
+    .summary-card .summary-value {
+        font-size: 18px;
+    }
+
+
+    /* ACTIVITY */
+
+    .activity-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .activity-section {
+        padding: 15px;
+        border-radius: 12px;
+    }
+
+    .activity-section h2 {
+        font-size: 19px;
+    }
+
+
+    /* PERSON */
+
+    .person-card {
+        padding: 13px;
+    }
+
+    .person-top {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .action-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .action-row button {
+        width: 100%;
+        min-height: 43px;
+    }
+
+
+    /* =====================================================
+       HISTORY MOBILE SCROLL
+    ===================================================== */
+
+    #milkibaHistoryWrapper {
+        width: 100%;
+        max-width: 100%;
+        margin-top: 18px;
+        overflow: visible;
+    }
+
+    .milkiba-history-section {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+
+        max-height: 52vh;
+
+        padding: 13px;
+
+        margin-bottom: 18px;
+
+        border-radius: 12px;
+
+        /*
+         * Finger swipe / normal horizontal scrollbar.
+         */
+        overflow-x: auto !important;
+        overflow-y: auto !important;
+
+        -webkit-overflow-scrolling: touch;
+
+        overscroll-behavior: contain;
+
+        scrollbar-width: auto;
+    }
+
+    .milkiba-history-section::-webkit-scrollbar {
+        width: 7px;
+        height: 10px;
+    }
+
+    .milkiba-history-section::-webkit-scrollbar-thumb {
+        background: #9ca3af;
+        border-radius: 10px;
+    }
+
+    .milkiba-history-section::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 10px;
+    }
+
+    .milkiba-history-title {
+        position: sticky;
+        top: 0;
+        z-index: 4;
+
+        background: #ffffff;
+
+        padding-bottom: 10px;
+    }
+
+    .milkiba-history-title h2 {
+        font-size: 18px;
+    }
+
+    .milkiba-history-date {
+        font-size: 12px;
+    }
+
+    .milkiba-history-table {
+        width: max-content !important;
+
+        /*
+         * Wide table = horizontal scrolling.
+         */
+        min-width: 1100px !important;
+    }
+
+    .milkiba-history-table th,
+    .milkiba-history-table td {
+        padding: 10px;
+        font-size: 12px;
+    }
+
+
+    /* OLD HISTORY */
+
+    .history-container {
+        width: 100%;
+        max-width: 100%;
+
+        max-height: 52vh;
+
+        overflow-x: auto !important;
+        overflow-y: auto !important;
+
+        -webkit-overflow-scrolling: touch;
+
+        scrollbar-width: auto;
+    }
+
+    .history-container::-webkit-scrollbar {
+        width: 7px;
+        height: 10px;
+    }
+
+    .history-container::-webkit-scrollbar-thumb {
+        background: #9ca3af;
+        border-radius: 10px;
+    }
+
+    .history-table {
+        width: max-content !important;
+
+        min-width: 1100px !important;
+    }
+
+
+    /* MODAL */
+
+    .modal {
+        padding: 8px;
+        align-items: flex-end;
+    }
+
+    .modal-content {
+        width: 100%;
+        max-width: 100%;
+
+        max-height:
+            calc(100vh - 16px);
+
+        border-radius:
+            14px 14px 0 0;
+
+        padding: 18px;
+
+        animation:
+            mobileModalAppear 0.3s ease both;
+    }
+
+    .modal-content h2 {
+        font-size: 19px;
+        margin-bottom: 17px;
+    }
+
+    .modal-content input,
+    .modal-content select,
+    .modal-content textarea {
+        font-size: 16px;
+    }
+
+    .form-actions {
+        display: grid;
+
+        grid-template-columns: 1fr;
+
+        gap: 8px;
+    }
+
+    .form-actions button {
+        width: 100%;
+        min-height: 45px;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONE
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .vendor-main {
+        padding: 9px;
+    }
+
+    .vendor-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .summary-card .summary-value {
+        font-size: 20px;
+    }
+
+    .activity-section {
+        padding: 13px;
+    }
+
+    .modal-content {
+        padding: 15px;
+    }
+
+    .milkiba-history-section {
+        padding: 10px;
+        max-height: 50vh;
+    }
+
+    .milkiba-history-table {
+        min-width: 1100px !important;
+    }
+
+    .history-container {
+        max-height: 50vh;
+    }
+
+    .history-table {
+        min-width: 1100px !important;
+    }
+}
+
+
+/* =========================================================
+   MOBILE MODAL ANIMATION
+========================================================= */
+
+@keyframes mobileModalAppear {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(100%);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+
+/* =========================================================
+   PREVENT OVERFLOW FROM DYNAMIC CONTENT
+========================================================= */
+
+/*
+ * Do NOT put overflow:hidden on the history containers.
+ * The history sections need overflow-x:auto.
+ */
+
+#sellerContainer,
+#buyerContainer {
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+
+        animation-iteration-count: 1 !important;
+
+        scroll-behavior: auto !important;
+
+        transition-duration: 0.01ms !important;
+    }
+}

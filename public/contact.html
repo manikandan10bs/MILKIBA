@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Contact - Milkiba</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7faf8;
+            color: #222;
+        }
+
+        header {
+            height: 70px;
+            padding: 0 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        nav {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+        }
+
+        nav a:hover {
+            color: #2e7d32;
+        }
+
+        .login-btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            background: #2e7d32;
+            color: white !important;
+        }
+
+        .login-btn:hover {
+            background: #256628;
+        }
+
+        .container {
+            min-height: calc(100vh - 70px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 550px;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 15px;
+            color: #222;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .contact-item {
+            padding: 20px;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .contact-item h3 {
+            margin-bottom: 8px;
+        }
+
+        .contact-item p {
+            color: #666;
+        }
+
+        .contact-item a {
+            color: #2e7d32;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .contact-item a:hover {
+            text-decoration: underline;
+        }
+
+        .whatsapp {
+            display: block;
+            margin-top: 25px;
+            padding: 14px;
+            background: #25d366;
+            color: white;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .whatsapp:hover {
+            background: #20bd5a;
+        }
+
+        .back {
+            display: block;
+            margin-top: 20px;
+            color: #555;
+            text-decoration: none;
+        }
+
+        .back:hover {
+            color: #2e7d32;
+        }
+
+        footer {
+            padding: 25px;
+            text-align: center;
+            background: #222;
+            color: white;
+        }
+
+        @media (max-width: 700px) {
+
+            header {
+                padding: 0 20px;
+            }
+
+            nav {
+                gap: 10px;
+            }
+
+            nav a:not(.login-btn) {
+                display: none;
+            }
+
+            .card {
+                padding: 25px 20px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .subtitle {
+                font-size: 14px;
+            }
+
+            .contact-item {
+                padding: 18px 15px;
+            }
+
+            .contact-item a {
+                word-break: break-word;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        MILKIBA
+    </div>
+
+    <nav>
+
+        <a href="./index.html">
+            Home
+        </a>
+
+        <a href="./about.html">
+            About
+        </a>
+
+        <a href="./contact.html">
+            Contact
+        </a>
+
+        <a href="./login.html" class="login-btn">
+            Login
+        </a>
+
+    </nav>
+
+</header>
+
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>
+            Contact MILKIBA
+        </h1>
+
+        <p class="subtitle">
+            If you need help with your account or have
+            any questions about MILKIBA, contact us.
+        </p>
+
+
+        <div class="contact-item">
+
+            <h3>
+                Contact Person
+            </h3>
+
+            <p>
+                Akash C
+            </p>
+
+        </div>
+
+
+        <div class="contact-item">
+
+            <h3>
+                Phone
+            </h3>
+
+            <p>
+                <a href="tel:7708546278">
+                    7708546278
+                </a>
+            </p>
+
+        </div>
+
+
+        <div class="contact-item">
+
+            <h3>
+                Email
+            </h3>
+
+            <p>
+
+                <a
+                    href="mailto:akashchinnaswamy2712@gmail.com?subject=MILKIBA%20Support"
+                    style="
+                        color: #2e7d32;
+                        text-decoration: none;
+                        font-weight: bold;
+                    "
+                >
+                    akashchinnaswamy2712@gmail.com
+                </a>
+
+            </p>
+
+        </div>
+
+
+        <a
+            class="whatsapp"
+            href="https://wa.me/917708546278?text=Hello%20Akash%2C%20I%20need%20help%20with%20MILKIBA."
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            Contact on WhatsApp
+        </a>
+
+
+        <a
+            class="back"
+            href="./index.html"
+        >
+            ← Back to Home
+        </a>
+
+    </div>
+
+</div>
+
+
+<footer>
+
+    <p>
+        © 2026 Milkiba. Milk Marketplace.
+    </p>
+
+</footer>
+
+
+<script>
+
+    console.log("MILKIBA Contact page loaded.");
+
+</script>
+
+</body>
+
+</html>

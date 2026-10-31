@@ -1,0 +1,2601 @@
+/* =========================================================
+   MILKIBA
+   RESPONSIVE STYLE SHEET
+   Bootstrap 5 + Custom MILKIBA Design
+========================================================= */
+
+
+/* =========================================================
+   ROOT VARIABLES
+========================================================= */
+
+:root {
+
+    --milk-green: #2e7d32;
+    --milk-green-dark: #256628;
+    --milk-green-light: #66bb6a;
+
+    --milk-bg: #f7faf8;
+    --milk-soft: #eef8f0;
+
+    --text-dark: #1f1f1f;
+    --text-normal: #333333;
+    --text-muted: #666666;
+
+    --border-light: #e7e7e7;
+
+    --white: #ffffff;
+
+    --navbar-height: 74px;
+
+    --transition-fast: 0.25s ease;
+    --transition-normal: 0.35s ease;
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body {
+
+    width: 100%;
+    min-height: 100vh;
+
+    font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background: var(--milk-bg);
+
+    color: var(--text-dark);
+
+    line-height: 1.5;
+
+    overflow-x: hidden;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+
+img,
+video {
+    max-width: 100%;
+}
+
+
+button,
+input,
+textarea,
+select {
+    font-family: inherit;
+}
+
+
+button,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+a {
+    text-decoration: none;
+}
+
+
+::selection {
+    background: var(--milk-green);
+    color: white;
+}
+
+
+a:focus-visible,
+button:focus-visible {
+
+    outline:
+        3px solid
+        rgba(46, 125, 50, 0.30);
+
+    outline-offset: 3px;
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 1000;
+
+    width: 100%;
+
+    min-height: var(--navbar-height);
+
+    background:
+        rgba(255, 255, 255, 0.97);
+
+    border-bottom:
+        1px solid
+        var(--border-light);
+
+    backdrop-filter:
+        blur(14px);
+
+    -webkit-backdrop-filter:
+        blur(14px);
+
+    box-shadow:
+        0 4px 20px
+        rgba(0, 0, 0, 0.05);
+
+    padding: 0 !important;
+}
+
+
+/* =========================================================
+   NAVBAR INNER
+========================================================= */
+
+.navbar-inner {
+
+    width: 100%;
+
+    min-height: var(--navbar-height);
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 25px;
+
+    padding:
+        0 clamp(14px, 4vw, 60px);
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.logo {
+
+    flex-shrink: 0;
+
+    color:
+        var(--milk-green) !important;
+
+    font-size:
+        clamp(21px, 2vw, 28px);
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+    white-space: nowrap;
+
+    transition:
+        transform var(--transition-fast),
+        color var(--transition-fast);
+}
+
+
+.logo:hover {
+
+    color:
+        var(--milk-green-dark) !important;
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* =========================================================
+   NAVIGATION SCROLL CONTAINER
+========================================================= */
+
+.nav-scroll {
+
+    flex: 1;
+
+    min-width: 0;
+
+    overflow-x: auto;
+
+    overflow-y: hidden;
+
+    scrollbar-width: none;
+
+    -ms-overflow-style: none;
+
+    /*
+       Keep navigation toward the right.
+    */
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+}
+
+
+.nav-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.nav-main {
+
+    width: max-content;
+
+    min-width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    flex-direction: row !important;
+
+    flex-wrap: nowrap !important;
+
+    gap:
+        clamp(8px, 1.8vw, 25px);
+}
+
+
+/* =========================================================
+   NAV LINKS
+========================================================= */
+
+.nav-main .nav-link {
+
+    position: relative;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    width: auto !important;
+
+    color:
+        var(--text-normal) !important;
+
+    font-size:
+        clamp(12px, 1vw, 15px);
+
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    padding:
+        8px 2px !important;
+
+    background: transparent !important;
+
+    border: none;
+
+    transition:
+        color var(--transition-fast),
+        transform var(--transition-fast);
+}
+
+
+/* =========================================================
+   NAV UNDERLINE
+========================================================= */
+
+.nav-main .nav-link::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+
+    bottom: 1px;
+
+    width: 0;
+
+    height: 2px;
+
+    margin: auto;
+
+    background:
+        var(--milk-green);
+
+    border-radius: 5px;
+
+    transition:
+        width var(--transition-fast);
+}
+
+
+.nav-main .nav-link:hover {
+
+    color:
+        var(--milk-green) !important;
+
+    transform:
+        translateY(-1px);
+}
+
+
+.nav-main .nav-link:hover::after {
+    width: 100%;
+}
+
+
+/* =========================================================
+   MOBILE LOGIN INSIDE NAV
+========================================================= */
+
+.nav-login-mobile {
+    display: none !important;
+}
+
+
+/* =========================================================
+   DESKTOP LOGIN BUTTON
+========================================================= */
+
+.login-container {
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+.login-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 88px;
+
+    padding:
+        10px 19px;
+
+    border-radius: 9px;
+
+    background:
+        var(--milk-green);
+
+    color: white !important;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    box-shadow:
+        0 5px 15px
+        rgba(46, 125, 50, 0.15);
+
+    transition:
+        background var(--transition-fast),
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast);
+}
+
+
+.login-btn:hover {
+
+    background:
+        var(--milk-green-dark);
+
+    color: white !important;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 9px 22px
+        rgba(46, 125, 50, 0.25);
+}
+
+
+.login-btn:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+
+    position: relative;
+
+    width: 100%;
+
+    min-height:
+        min(720px, calc(100vh - var(--navbar-height)));
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    padding:
+        clamp(70px, 9vh, 120px)
+        20px;
+
+    overflow: hidden;
+
+    isolation: isolate;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eef8f0,
+            #f7faf8
+        );
+}
+
+
+/* =========================================================
+   HERO VIDEO
+========================================================= */
+
+.hero-video {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    max-width: none;
+
+    object-fit: cover;
+
+    object-position: center center;
+
+    z-index: -2;
+
+    pointer-events: none;
+
+    display: block;
+}
+
+
+/* =========================================================
+   HERO OVERLAY
+========================================================= */
+
+.hero-overlay {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: -1;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,0.65) 0%,
+            rgba(255,255,255,0.45) 42%,
+            rgba(255,255,255,0.25) 100%
+        );
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   HERO CONTAINER
+========================================================= */
+
+.hero-container {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HERO CONTENT
+========================================================= */
+
+.hero-content {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
+
+    max-width: 950px;
+
+    margin: 0 auto;
+
+    overflow-wrap: break-word;
+
+    word-wrap: break-word;
+
+    animation:
+        heroAppear 1s
+        cubic-bezier(
+            0.22,
+            1,
+            0.36,
+            1
+        );
+}
+
+
+/* =========================================================
+   HERO BADGE
+========================================================= */
+
+.hero-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    max-width: 100%;
+
+    padding:
+        7px 14px;
+
+    margin-bottom: 20px;
+
+    border:
+        1px solid
+        rgba(46,125,50,0.25);
+
+    border-radius: 999px;
+
+    background:
+        rgba(255,255,255,0.72);
+
+    color:
+        var(--milk-green);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.2px;
+
+    text-transform: uppercase;
+
+    backdrop-filter:
+        blur(8px);
+
+    -webkit-backdrop-filter:
+        blur(8px);
+
+    animation:
+        badgeAppear 0.8s
+        ease-out 0.2s both;
+}
+
+
+/* =========================================================
+   HERO HEADING
+========================================================= */
+
+.hero h1 {
+
+    width: 100%;
+
+    margin-bottom: 28px;
+
+    color:
+        var(--text-dark);
+
+    font-size:
+        clamp(
+            44px,
+            6vw,
+            78px
+        );
+
+    line-height: 1.02;
+
+    letter-spacing:
+        clamp(
+            -2px,
+            -0.15vw,
+            -1px
+        );
+
+    font-weight: 900;
+
+    text-shadow:
+        0 3px 20px
+        rgba(255,255,255,0.45);
+}
+
+
+.hero h1 span {
+
+    display: block;
+
+    margin-top: 8px;
+
+    color:
+        var(--milk-green);
+}
+
+
+/* =========================================================
+   HERO DESCRIPTION
+========================================================= */
+
+.hero p {
+
+    width: 100%;
+
+    max-width: 700px;
+
+    margin:
+        0 auto 38px;
+
+    color:
+        #4f4f4f;
+
+    font-size:
+        clamp(
+            16px,
+            1.7vw,
+            21px
+        );
+
+    line-height: 1.7;
+
+    font-weight: 400;
+}
+
+
+/* =========================================================
+   HERO BUTTONS
+========================================================= */
+
+.hero-buttons {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 16px;
+
+    flex-wrap: wrap;
+
+    width: 100%;
+}
+
+
+.primary-btn,
+.secondary-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 150px;
+
+    padding:
+        14px 28px;
+
+    border-radius: 9px;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+    transition:
+        transform var(--transition-normal),
+        box-shadow var(--transition-normal),
+        background var(--transition-normal);
+}
+
+
+.primary-btn {
+
+    background:
+        var(--milk-green);
+
+    color: white !important;
+
+    box-shadow:
+        0 8px 20px
+        rgba(46,125,50,0.22);
+}
+
+
+.primary-btn:hover {
+
+    background:
+        var(--milk-green-dark);
+
+    color: white !important;
+
+    transform:
+        translateY(-4px);
+
+    box-shadow:
+        0 15px 30px
+        rgba(46,125,50,0.30);
+}
+
+
+.secondary-btn {
+
+    background:
+        rgba(255,255,255,0.82);
+
+    border:
+        1px solid
+        rgba(46,125,50,0.55);
+
+    color:
+        var(--milk-green) !important;
+
+    backdrop-filter:
+        blur(8px);
+
+    -webkit-backdrop-filter:
+        blur(8px);
+}
+
+
+.secondary-btn:hover {
+
+    background: white;
+
+    color:
+        var(--milk-green-dark) !important;
+
+    transform:
+        translateY(-4px);
+
+    box-shadow:
+        0 12px 28px
+        rgba(0,0,0,0.08);
+}
+
+
+/* =========================================================
+   HERO STATS
+========================================================= */
+
+.hero-stats {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    flex-wrap: nowrap;
+
+    gap: 28px;
+
+    width: 100%;
+
+    margin-top: 50px;
+
+    animation:
+        statsAppear 1s
+        ease-out 0.5s both;
+}
+
+
+.hero-stat {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 55px;
+
+    text-align: center;
+}
+
+
+.hero-stat strong {
+
+    color:
+        var(--milk-green);
+
+    font-size: 20px;
+
+    font-weight: 800;
+}
+
+
+.hero-stat span {
+
+    margin-top: 2px;
+
+    color: #666;
+
+    font-size: 12px;
+
+    white-space: nowrap;
+}
+
+
+.hero-stat-divider {
+
+    width: 1px;
+
+    height: 30px;
+
+    flex-shrink: 0;
+
+    background:
+        rgba(0,0,0,0.15);
+}
+
+
+/* =========================================================
+   SCROLL INDICATOR
+========================================================= */
+
+.scroll-indicator {
+
+    position: absolute;
+
+    bottom: 22px;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 3px;
+
+    color: #555;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.8px;
+
+    text-decoration: none;
+
+    z-index: 3;
+
+    animation:
+        scrollFloat 2s
+        ease-in-out
+        infinite;
+}
+
+
+.scroll-indicator:hover {
+    color: var(--milk-green);
+}
+
+
+.scroll-arrow {
+
+    color:
+        var(--milk-green);
+
+    font-size: 18px;
+}
+
+
+/* =========================================================
+   ABOUT
+========================================================= */
+
+.about {
+
+    width: 100%;
+
+    padding:
+        clamp(70px,9vw,110px)
+        20px;
+
+    text-align: center;
+
+    background: white;
+}
+
+
+/* =========================================================
+   SECTION HEADING
+========================================================= */
+
+.section-heading {
+
+    width: 100%;
+
+    max-width: 800px;
+
+    margin:
+        0 auto 55px;
+}
+
+
+.section-label {
+
+    display: inline-block;
+
+    margin-bottom: 12px;
+
+    color:
+        var(--milk-green);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+
+.about h2 {
+
+    margin-bottom: 18px;
+
+    color: #222;
+
+    font-size:
+        clamp(
+            30px,
+            4vw,
+            46px
+        );
+
+    line-height: 1.15;
+}
+
+
+.about h2 span {
+    color: var(--milk-green);
+}
+
+
+.section-heading p {
+
+    max-width: 650px;
+
+    margin: 0 auto;
+
+    color: #6a6a6a;
+
+    font-size:
+        clamp(
+            15px,
+            1.5vw,
+            18px
+        );
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.cards {
+
+    width: 100%;
+
+    max-width: 1150px;
+
+    margin:
+        0 auto;
+}
+
+
+.card {
+
+    position: relative;
+
+    width: 100%;
+
+    min-height: 290px;
+
+    padding:
+        35px 30px;
+
+    border:
+        1px solid
+        var(--border-light);
+
+    border-radius: 18px;
+
+    background: white;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+
+    transition:
+        transform var(--transition-normal),
+        box-shadow var(--transition-normal),
+        border-color var(--transition-normal);
+
+    animation:
+        cardAppear 0.8s
+        ease both;
+}
+
+
+.card::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 4px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--milk-green),
+            var(--milk-green-light)
+        );
+
+    transform:
+        scaleX(0);
+
+    transform-origin: left;
+
+    transition:
+        transform var(--transition-normal);
+}
+
+
+.card:hover {
+
+    transform:
+        translateY(-10px);
+
+    border-color:
+        rgba(46,125,50,0.35);
+
+    box-shadow:
+        0 20px 45px
+        rgba(0,0,0,0.10);
+}
+
+
+.card:hover::before {
+    transform: scaleX(1);
+}
+
+
+.card-number {
+
+    position: absolute;
+
+    top: 20px;
+
+    right: 24px;
+
+    color:
+        rgba(46,125,50,0.12);
+
+    font-size: 30px;
+
+    font-weight: 900;
+
+    line-height: 1;
+}
+
+
+.card-icon {
+
+    width: 58px;
+    height: 58px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 18px;
+
+    border-radius: 50%;
+
+    background:
+        var(--milk-soft);
+
+    font-size: 26px;
+
+    transition:
+        transform var(--transition-normal);
+}
+
+
+.card:hover .card-icon {
+
+    transform:
+        scale(1.12)
+        rotate(3deg);
+}
+
+
+.card h3 {
+
+    margin-bottom: 12px;
+
+    color:
+        var(--milk-green);
+
+    font-size: 23px;
+
+    font-weight: 700;
+}
+
+
+.card p {
+
+    max-width: 290px;
+
+    margin-bottom: 0;
+
+    color: #666;
+
+    font-size: 15px;
+
+    line-height: 1.7;
+}
+
+
+.card-line {
+
+    width: 35px;
+
+    height: 2px;
+
+    margin-top: 22px;
+
+    background:
+        var(--milk-green);
+
+    border-radius: 10px;
+
+    transition:
+        width var(--transition-normal);
+}
+
+
+.card:hover .card-line {
+    width: 65px;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+
+    width: 100%;
+
+    background: #1d1d1d;
+
+    color: white;
+
+    padding:
+        40px 20px 25px;
+
+    text-align: center;
+}
+
+
+.footer-content {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-bottom: 25px;
+}
+
+
+.footer-logo {
+
+    color:
+        var(--milk-green-light);
+
+    font-size: 24px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+
+.footer-content p {
+
+    margin-bottom: 0;
+
+    color: #bdbdbd;
+
+    font-size: 14px;
+}
+
+
+.footer-bottom {
+
+    padding-top: 20px;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,0.10);
+}
+
+
+.footer-bottom p {
+
+    margin-bottom: 0;
+
+    color: #999;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+========================================================= */
+
+@media (min-width: 1400px) {
+
+    .navbar-inner {
+
+        padding-left: 70px;
+        padding-right: 70px;
+    }
+
+
+    .hero {
+        min-height: 700px;
+    }
+
+
+    .hero-content {
+        max-width: 1050px;
+    }
+
+
+    .about {
+        padding-left: 8%;
+        padding-right: 8%;
+    }
+
+
+    .cards {
+        max-width: 1250px;
+    }
+
+
+    .card {
+        min-height: 300px;
+    }
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 991.98px) {
+
+    :root {
+        --navbar-height: 68px;
+    }
+
+
+    .navbar-inner {
+
+        min-height: 68px;
+
+        padding:
+            0 18px;
+
+        gap: 15px;
+    }
+
+
+    .logo {
+        font-size: 21px;
+    }
+
+
+    /*
+       Navbar remains horizontal.
+       Navigation is positioned toward the right.
+    */
+
+    .nav-scroll {
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: flex-end;
+
+        flex: 1;
+
+        min-width: 0;
+
+        overflow-x: auto;
+    }
+
+
+    .nav-main {
+
+        flex-direction: row !important;
+
+        flex-wrap: nowrap !important;
+
+        justify-content: flex-end;
+
+        width: max-content;
+
+        min-width: 100%;
+
+        gap: 10px;
+
+        margin-left: auto;
+    }
+
+
+    .nav-main .nav-link {
+
+        flex-shrink: 0;
+
+        width: auto !important;
+
+        font-size: 12px;
+
+        padding:
+            7px 4px !important;
+
+        font-weight: 700;
+    }
+
+
+    /*
+       Login remains visible on tablet/mobile.
+    */
+
+    .login-container {
+
+        display: flex !important;
+
+        flex-shrink: 0;
+
+        align-items: center;
+
+        justify-content: center;
+    }
+
+
+    .login-btn {
+
+        min-width: 76px;
+
+        padding:
+            8px 12px;
+
+        font-size: 12px;
+    }
+
+
+    /*
+       Existing mobile-login class is not needed
+       when the normal Login button is used.
+    */
+
+    .nav-login-mobile {
+        display: none !important;
+    }
+
+
+    .hero {
+
+        min-height: 620px;
+
+        padding:
+            80px 20px;
+    }
+
+
+    .hero-overlay {
+
+        background:
+            linear-gradient(
+                90deg,
+                rgba(255,255,255,0.55),
+                rgba(255,255,255,0.30)
+            );
+    }
+
+
+    .hero h1 {
+
+        font-size:
+            clamp(
+                42px,
+                7vw,
+                64px
+            );
+    }
+
+
+    .hero p {
+
+        font-size:
+            clamp(
+                16px,
+                2vw,
+                19px
+            );
+    }
+
+
+    .hero-stats {
+        gap: 24px;
+    }
+
+
+    .cards {
+        max-width: 850px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 767.98px) {
+
+    :root {
+        --navbar-height: 60px;
+    }
+
+
+    /* =====================================================
+       MOBILE NAVBAR
+    ====================================================== */
+
+    .navbar {
+
+        min-height: 60px;
+
+        overflow: hidden;
+    }
+
+
+    .navbar-inner {
+
+        min-height: 60px;
+
+        height: 60px;
+
+        padding:
+            0 10px;
+
+        gap: 7px;
+    }
+
+
+    .logo {
+
+        flex-shrink: 0;
+
+        font-size: 18px;
+
+        letter-spacing: 0.8px;
+    }
+
+
+    /*
+       Navigation area is moved toward the RIGHT.
+       If the screen is too small, it can scroll horizontally.
+    */
+
+    .nav-scroll {
+
+        flex: 1;
+
+        min-width: 0;
+
+        height: 100%;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: flex-end;
+
+        overflow-x: auto;
+
+        overflow-y: hidden;
+
+        scrollbar-width: none;
+    }
+
+
+    .nav-scroll::-webkit-scrollbar {
+        display: none;
+    }
+
+
+    .nav-main {
+
+        display: flex;
+
+        flex-direction: row !important;
+
+        flex-wrap: nowrap !important;
+
+        align-items: center;
+
+        justify-content: flex-end;
+
+        width: max-content;
+
+        min-width: max-content;
+
+        gap: 7px;
+
+        padding:
+            0 4px;
+
+        margin-left: auto;
+    }
+
+
+    /*
+       MOBILE NAVIGATION
+       BOLD
+    */
+
+    .nav-main .nav-link {
+
+        display: inline-flex !important;
+
+        flex: 0 0 auto;
+
+        width: auto !important;
+
+        padding:
+            6px 3px !important;
+
+        font-size: 11px;
+
+        line-height: 1;
+
+        white-space: nowrap;
+
+        font-weight: 800 !important;
+    }
+
+
+    .nav-main .nav-link::after {
+        display: none;
+    }
+
+
+    /*
+       MOBILE LOGIN
+       Keep Login on the right side of navbar.
+    */
+
+    .login-container {
+
+        display: flex !important;
+
+        align-items: center;
+
+        justify-content: center;
+
+        flex-shrink: 0;
+
+        margin-left: 2px;
+    }
+
+
+    .login-btn {
+
+        min-width: auto;
+
+        padding:
+            7px 9px;
+
+        border-radius: 7px;
+
+        font-size: 9px;
+
+        font-weight: 800;
+
+        white-space: nowrap;
+    }
+
+
+    .nav-login-mobile {
+        display: none !important;
+    }
+
+
+    /* =====================================================
+       MOBILE HERO
+    ====================================================== */
+
+    .hero {
+
+        min-height: auto;
+
+        padding:
+            65px 16px 60px;
+    }
+
+
+    .hero-video {
+
+        width: 100%;
+        height: 100%;
+
+        object-fit: cover;
+
+        object-position: center center;
+    }
+
+
+    .hero-overlay {
+
+        background:
+            rgba(255,255,255,0.42);
+    }
+
+
+    .hero-container {
+
+        width: 100%;
+
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+
+    .hero-content {
+
+        max-width: 100%;
+    }
+
+
+    .hero-badge {
+
+        max-width: 100%;
+
+        padding:
+            6px 11px;
+
+        margin-bottom: 17px;
+
+        font-size: 9px;
+
+        letter-spacing: 0.8px;
+
+        white-space: nowrap;
+    }
+
+
+    .hero h1 {
+
+        margin-bottom: 20px;
+
+        font-size:
+            clamp(
+                32px,
+                10vw,
+                46px
+            );
+
+        line-height: 1.08;
+
+        letter-spacing: -1px;
+    }
+
+
+    .hero h1 span {
+        margin-top: 5px;
+    }
+
+
+    .hero p {
+
+        max-width: 100%;
+
+        padding:
+            0 5px;
+
+        margin:
+            0 auto 28px;
+
+        font-size: 15px;
+
+        line-height: 1.6;
+    }
+
+
+    /* =====================================================
+       MOBILE BUTTONS
+    ====================================================== */
+
+    .hero-buttons {
+
+        flex-direction: column;
+
+        gap: 11px;
+
+        width: 100%;
+    }
+
+
+    .primary-btn,
+    .secondary-btn {
+
+        width: 100%;
+
+        max-width: 280px;
+
+        min-width: 0;
+
+        padding:
+            13px 20px;
+    }
+
+
+    /* =====================================================
+       MOBILE STATS
+    ====================================================== */
+
+    .hero-stats {
+
+        width: 100%;
+
+        max-width: 340px;
+
+        margin:
+            35px auto 0;
+
+        gap: 14px;
+    }
+
+
+    .hero-stat {
+        min-width: 45px;
+    }
+
+
+    .hero-stat strong {
+        font-size: 17px;
+    }
+
+
+    .hero-stat span {
+        font-size: 9px;
+    }
+
+
+    .hero-stat-divider {
+        height: 24px;
+    }
+
+
+    .scroll-indicator {
+        display: none;
+    }
+
+
+    /* =====================================================
+       ABOUT
+    ====================================================== */
+
+    .about {
+
+        padding:
+            60px 15px;
+    }
+
+
+    .section-heading {
+        margin-bottom: 35px;
+    }
+
+
+    .section-label {
+
+        font-size: 11px;
+
+        letter-spacing: 1.7px;
+    }
+
+
+    .about h2 {
+
+        margin-bottom: 15px;
+
+        font-size:
+            clamp(
+                27px,
+                8vw,
+                34px
+            );
+
+        line-height: 1.2;
+    }
+
+
+    .section-heading p {
+
+        font-size: 15px;
+
+        line-height: 1.65;
+    }
+
+
+    /* =====================================================
+       CARDS
+    ====================================================== */
+
+    .cards {
+        width: 100%;
+    }
+
+
+    .card {
+
+        min-height: 255px;
+
+        padding:
+            28px 20px;
+    }
+
+
+    .card-number {
+
+        top: 18px;
+
+        right: 20px;
+
+        font-size: 27px;
+    }
+
+
+    .card-icon {
+
+        width: 55px;
+        height: 55px;
+
+        font-size: 24px;
+
+        margin-bottom: 16px;
+    }
+
+
+    .card h3 {
+        font-size: 21px;
+    }
+
+
+    .card p {
+
+        max-width: 300px;
+
+        font-size: 14px;
+
+        line-height: 1.65;
+    }
+
+
+    .card:hover {
+        transform: none;
+    }
+
+
+    .card:hover .card-icon {
+        transform: none;
+    }
+
+
+    .card:hover .card-line {
+        width: 35px;
+    }
+
+
+    /* =====================================================
+       FOOTER
+    ====================================================== */
+
+    footer {
+
+        padding:
+            35px 15px 22px;
+    }
+
+
+    .footer-logo {
+        font-size: 22px;
+    }
+
+
+    .footer-content p {
+        font-size: 13px;
+    }
+
+
+    .footer-bottom p {
+
+        font-size: 12px;
+
+        line-height: 1.5;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 575.98px) {
+
+    .navbar-inner {
+
+        padding:
+            0 8px;
+
+        gap: 6px;
+    }
+
+
+    .logo {
+        font-size: 17px;
+    }
+
+
+    .nav-scroll {
+
+        justify-content: flex-end;
+
+        overflow-x: auto;
+    }
+
+
+    .nav-main {
+
+        justify-content: flex-end;
+
+        gap: 6px;
+
+        margin-left: auto;
+    }
+
+
+    .nav-main .nav-link {
+
+        font-size: 10px;
+
+        padding:
+            6px 2px !important;
+
+        font-weight: 800 !important;
+    }
+
+
+    .login-btn {
+
+        padding:
+            6px 8px;
+
+        font-size: 8px;
+
+        font-weight: 800;
+    }
+
+
+    .hero {
+
+        padding:
+            62px 14px 58px;
+    }
+
+
+    .hero-badge {
+
+        font-size: 8px;
+
+        letter-spacing: 0.6px;
+
+        padding:
+            6px 9px;
+    }
+
+
+    .hero h1 {
+
+        font-size:
+            clamp(
+                30px,
+                9.5vw,
+                40px
+            );
+    }
+
+
+    .hero p {
+
+        font-size: 14px;
+
+        padding:
+            0 2px;
+    }
+
+
+    .hero-stats {
+
+        max-width: 300px;
+
+        gap: 10px;
+    }
+
+
+    .hero-stat strong {
+        font-size: 15px;
+    }
+
+
+    .hero-stat span {
+        font-size: 8px;
+    }
+
+
+    .hero-stat-divider {
+        height: 22px;
+    }
+
+
+    .about {
+
+        padding:
+            55px 14px;
+    }
+
+
+    .card {
+
+        min-height: 250px;
+
+        padding:
+            25px 18px;
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media (max-width: 399.98px) {
+
+    .navbar-inner {
+
+        padding:
+            0 6px;
+
+        gap: 5px;
+    }
+
+
+    .logo {
+        font-size: 16px;
+    }
+
+
+    .nav-scroll {
+
+        justify-content: flex-end;
+    }
+
+
+    .nav-main {
+
+        gap: 5px;
+
+        justify-content: flex-end;
+
+        margin-left: auto;
+    }
+
+
+    .nav-main .nav-link {
+
+        font-size: 9.5px;
+
+        padding:
+            6px 2px !important;
+
+        font-weight: 800 !important;
+    }
+
+
+    .login-btn {
+
+        padding:
+            6px 7px;
+
+        font-size: 7.5px;
+
+        font-weight: 800;
+    }
+
+
+    .hero {
+
+        padding:
+            55px 12px 55px;
+    }
+
+
+    .hero-badge {
+
+        font-size: 7.5px;
+
+        letter-spacing: 0.45px;
+
+        padding:
+            5px 8px;
+    }
+
+
+    .hero h1 {
+
+        font-size:
+            clamp(
+                28px,
+                9vw,
+                34px
+            );
+
+        letter-spacing:
+            -0.7px;
+    }
+
+
+    .hero p {
+
+        font-size: 14px;
+
+        line-height: 1.55;
+    }
+
+
+    .primary-btn,
+    .secondary-btn {
+
+        max-width: 250px;
+
+        padding:
+            12px 18px;
+
+        font-size: 14px;
+    }
+
+
+    .hero-stats {
+
+        max-width: 285px;
+
+        gap: 8px;
+    }
+
+
+    .hero-stat {
+        min-width: 40px;
+    }
+
+
+    .hero-stat strong {
+        font-size: 14px;
+    }
+
+
+    .hero-stat span {
+        font-size: 7.5px;
+    }
+
+
+    .hero-stat-divider {
+        height: 20px;
+    }
+
+
+    .about h2 {
+        font-size: 26px;
+    }
+
+
+    .card {
+        padding:
+            24px 16px;
+    }
+
+
+    .card-number {
+
+        right: 17px;
+
+        font-size: 25px;
+    }
+
+}
+
+
+/* =========================================================
+   EXTRA SMALL DEVICES
+========================================================= */
+
+@media (max-width: 339.98px) {
+
+    .logo {
+        font-size: 15px;
+    }
+
+
+    .nav-main {
+        gap: 4px;
+    }
+
+
+    .nav-main .nav-link {
+
+        font-size: 9px;
+
+        font-weight: 800 !important;
+    }
+
+
+    .login-btn {
+
+        font-size: 7px;
+
+        padding:
+            5px 6px;
+    }
+
+
+    .hero {
+        padding:
+            50px 10px;
+    }
+
+
+    .hero h1 {
+        font-size: 27px;
+    }
+
+
+    .hero p {
+        font-size: 13px;
+    }
+
+
+    .hero-stats {
+        gap: 6px;
+    }
+
+
+    .hero-stat strong {
+        font-size: 13px;
+    }
+
+
+    .hero-stat span {
+        font-size: 7px;
+    }
+
+
+    .hero-stat-divider {
+        height: 18px;
+    }
+
+}
+
+
+/* =========================================================
+   HORIZONTAL SAFETY
+========================================================= */
+
+.container,
+.container-fluid,
+.row,
+.hero-container,
+.hero-content,
+.cards,
+.card {
+    max-width: 100%;
+}
+
+
+.row {
+    --bs-gutter-x: 1.5rem;
+}
+
+
+.hero h1,
+.hero p,
+.about h2,
+.section-heading p,
+.card h3,
+.card p {
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   TOUCH DEVICES
+========================================================= */
+
+@media (hover: none) and (pointer: coarse) {
+
+    .navbar:hover {
+        box-shadow:
+            0 4px 20px
+            rgba(0,0,0,0.05);
+    }
+
+
+    .nav-main .nav-link:hover {
+        transform: none;
+    }
+
+
+    .primary-btn:hover,
+    .secondary-btn:hover,
+    .login-btn:hover {
+        transform: none;
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    html {
+        scroll-behavior: auto;
+    }
+
+
+    * {
+
+        animation-duration:
+            0.01ms !important;
+
+        animation-iteration-count:
+            1 !important;
+
+        transition-duration:
+            0.01ms !important;
+
+        scroll-behavior:
+            auto !important;
+    }
+
+
+    .hero-video {
+        display: none;
+    }
+
+
+    .scroll-indicator {
+        animation: none;
+    }
+
+}
+
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes heroAppear {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(30px);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+
+@keyframes badgeAppear {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(-15px);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+
+@keyframes statsAppear {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(20px);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+
+@keyframes cardAppear {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(25px);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+
+@keyframes scrollFloat {
+
+    0%,
+    100% {
+
+        transform:
+            translateX(-50%)
+            translateY(0);
+    }
+
+    50% {
+
+        transform:
+            translateX(-50%)
+            translateY(7px);
+    }
+}
