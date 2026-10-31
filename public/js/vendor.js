@@ -5278,3 +5278,40 @@ function renderDuesManagementView() {
     const totalPayEl = document.getElementById('duesTotalPayable');
     if (totalPayEl) totalPayEl.textContent = `₹${totalPayable.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
 }
+
+
+/* =========================================================
+   DEMO / PREVIEW MODE FOR DIRECT VENDOR DASHBOARD ACCESS
+========================================================= */
+
+function enablePreviewMode() {
+    const banner = document.getElementById('vendorPreviewBanner');
+    if (banner) banner.classList.remove('hidden');
+
+    const nameEl = document.getElementById('userName');
+    if (nameEl) nameEl.textContent = 'Demo Vendor';
+
+    const today = new Date().toISOString().split('T')[0];
+    const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+    const prevDay = new Date(Date.now() - 172800000).toISOString().split('T')[0];
+
+    allVendorCollectionsCache = [
+        { id: 'col1', sellerName: 'Ramesh Dairy Farm', date: today, session: 'morning', actualQuantity: 35.5, quality: 'Good', rate: 44.0, totalAmount: 1562.0, paymentAmount: 1562.0, pendingAmount: 0, paymentStatus: 'Paid' },
+        { id: 'col2', sellerName: 'Suresh Cattle', date: today, session: 'morning', actualQuantity: 28.0, quality: 'Good', rate: 45.0, totalAmount: 1260.0, paymentAmount: 1000.0, pendingAmount: 260.0, paymentStatus: 'Partial' },
+        { id: 'col3', sellerName: 'Murugan Milk Yield', date: yesterday, session: 'evening', actualQuantity: 42.0, quality: 'Good', rate: 43.5, totalAmount: 1827.0, paymentAmount: 1827.0, pendingAmount: 0, paymentStatus: 'Paid' },
+        { id: 'col4', sellerName: 'Venkatesh Farmers', date: yesterday, session: 'morning', actualQuantity: 30.0, quality: 'Average', rate: 42.0, totalAmount: 1260.0, paymentAmount: 0, pendingAmount: 1260.0, paymentStatus: 'Not Paid' },
+        { id: 'col5', sellerName: 'Karthik Organic Dairy', date: prevDay, session: 'morning', actualQuantity: 50.0, quality: 'Good', rate: 46.0, totalAmount: 2300.0, paymentAmount: 1500.0, pendingAmount: 800.0, paymentStatus: 'Partial' }
+    ];
+
+    allVendorSuppliesCache = [
+        { id: 'sup1', buyerName: 'Priya Family Store', date: today, session: 'morning', suppliedQuantity: 15.0, rate: 56.0, totalAmount: 840.0, paymentAmount: 840.0, pendingAmount: 0, paymentStatus: 'Paid' },
+        { id: 'sup2', buyerName: 'Hotel Saravana Grand', date: today, session: 'morning', suppliedQuantity: 30.0, rate: 55.0, totalAmount: 1650.0, paymentAmount: 1000.0, pendingAmount: 650.0, paymentStatus: 'Partial' },
+        { id: 'sup3', buyerName: 'Anand Bakery & Sweets', date: yesterday, session: 'evening', suppliedQuantity: 25.0, rate: 58.0, totalAmount: 1450.0, paymentAmount: 0, pendingAmount: 1450.0, paymentStatus: 'Not Paid' },
+        { id: 'sup4', buyerName: 'Kumar Household', date: yesterday, session: 'morning', suppliedQuantity: 4.0, rate: 56.0, totalAmount: 224.0, paymentAmount: 224.0, pendingAmount: 0, paymentStatus: 'Paid' },
+        { id: 'sup5', buyerName: 'Sangeetha Tea Stall', date: prevDay, session: 'morning', suppliedQuantity: 20.0, rate: 55.0, totalAmount: 1100.0, paymentAmount: 600.0, pendingAmount: 500.0, paymentStatus: 'Partial' }
+    ];
+
+    initAnalyticsControls();
+    initPrimaryViewSwitcher();
+    applyAnalyticsFilterAndRender();
+}

@@ -26,6 +26,9 @@
 <body class="vendor-page">
 
     <main class="vendor-main">
+        <div id="vendorPreviewBanner" class="preview-mode-banner hidden">
+            <span>👁️ <strong>Demo / Preview Mode</strong>: You are viewing interactive sample data. <a href="./login.html" style="font-weight: 800; text-decoration: underline; color: #16803c;">Log In Here</a> to access live account records.</span>
+        </div>
 
         <header class="vendor-header">
 
@@ -80,9 +83,8 @@
                 </div>
 
 
-                <button
-                    type="button"
-                    id="logoutBtn"
+                <a href="./index.html" class="home-nav-btn" style="display:inline-flex; align-items:center; padding: 9px 15px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: #334155; font-size: 13px; font-weight: 700; white-space: nowrap;">🏠 Home</a>
+                <button type="button" id="logoutBtn"
                     class="logout-btn"
                 >
                     Logout
@@ -97,7 +99,7 @@
         ====================================================== -->
         <nav class="vendor-nav-tabs" role="tablist" aria-label="Vendor Portal Navigation">
             <button type="button" class="vendor-nav-tab active" data-view="dashboard">
-                📊 Business Analytics & Graphs
+                📊 Dashboard Overview
             </button>
             <button type="button" class="vendor-nav-tab" data-view="dues">
                 💰 Buyer & Seller Dues
