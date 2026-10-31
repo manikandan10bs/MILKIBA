@@ -116,27 +116,30 @@ MILKIBA operates on a **Serverless Event-Driven Architecture** leveraging native
 - **Request Oversight**: If a vendor submits an adjustment to a previous supply record, the buyer reviews the explanation and approves or declines.
 
 #### C. Vendor (Distributor) Dashboard
-- **Overall Analytics & Multi-Period Reporting**:
-  - **Dynamic Period Switcher**: Instantly switch between **Day Report**, **Weekly Report** (7-day rolling/calendar week), **Monthly Report** (calendar month), **Yearly Report**, and **All-Time** historical summaries.
-  - **8 Real-Time Business KPIs**:
-    1. *Milk Collected*: Total volume in liters and total farmer collection count.
-    2. *Milk Supplied*: Total volume in liters and total buyer delivery count.
-    3. *Net Stock Margin*: Exact inventory balance (+/- surplus or deficit).
-    4. *Purchase Cost*: Total expense incurred from dairy farmers (with paid breakdown).
-    5. *Sales Revenue*: Total revenue billed to consumers (with collected breakdown).
-    6. *Gross Profit / Earnings*: Real-time margin with automated percentage badge.
-    7. *Seller Dues (Payable)*: Outstanding debt owed to farmers.
-    8. *Buyer Dues (Receivable)*: Outstanding money to be collected from buyers.
-  - **Period Trend Breakdown Table**: Grouped summary showing inventory and margin trends across sub-periods.
-  - **Itemized Ledger Tables**: Tabbed inspection of all individual collections and supplies within the selected period.
-- **Comprehensive Multi-File PDF Export Engine**:
-  - Powered by `jsPDF` and `jspdf-autotable` directly in the browser (zero server load).
-  - **📄 Download Full Audit Report (PDF)**: High-resolution multi-page document featuring official branding, metadata, executive KPI cards, itemized collection ledgers with footer totals, itemized supply ledgers with footer totals, and page numbering.
-  - **🥛 Download Collections PDF**: Dedicated ledger of all collection entries in the period.
-  - **🚚 Download Supplies PDF**: Dedicated ledger of all supply distributions in the period.
-  - **Individual Transaction Slips**: Export single-receipt PDF slips for individual farmer collections or buyer deliveries on demand.
-- **Daily Operations Queue**: Real-time morning/evening queues for collecting from waiting farmers and dispatching to waiting buyers.
-- **Audit & Governance**: Two-party verification mechanism—vendors submit edit or deletion requests for recorded transactions, requiring target user consent.
+- **Multi-View Section Switcher**: Seamless 1-click tabbed navigation between 4 dedicated operational views:
+  1. `📊 Business Analytics & Graphs`: Visual charts, KPI performance, unit economics, period tables, and PDF reports.
+  2. `💰 Buyer & Seller Dues`: Dedicated credit risk and outstanding debt management center.
+  3. `⚡ Daily Operations & Queues`: Live session queues for collecting milk and dispatching supplies.
+  4. `📋 Historical Ledgers`: Full historical collections and supplies with two-party change request approvals.
+- **Graphical Representation & Chart.js Engine**:
+  - **Milk Volume In vs Out Chart**: Interactive multi-bar chart comparing Collected Liters vs Supplied Liters over time.
+  - **Financial Flow & Profitability Chart**: Triple-metric chart visualizing Sales Revenue, Purchase Costs, and Net Gross Profit.
+  - **Dues & Debt Exposure Doughnut Chart**: Proportional breakdown of Buyer Receivables (money owed to you) vs Seller Payables (money you owe farmers) vs Cash Inflow/Outflow.
+  - **Payment Settlement Distribution Chart**: Doughnut chart tracking percentage of transactions categorized as Fully Paid, Partial Payment, or Unpaid.
+- **Business Unit Economics Panel**:
+  - *Avg Purchase Price (₹/L)*: Weighted cost per liter paid to dairy farmers.
+  - *Avg Selling Price (₹/L)*: Weighted revenue per liter billed to consumers.
+  - *Gross Margin Spread (₹/L)*: Net profit pocketed per liter distributed.
+  - *Distribution Efficiency (%)*: Ratio of collected milk successfully distributed to end-buyers.
+- **Comprehensive Dues & Risk Management Center**:
+  - **Buyer Receivables (Money Owed to You)**: Itemized debtor ledger showing buyer name, volume bought, billed amount, paid amount, pending balance, and risk badge (High Due vs Normal).
+  - **Seller Payables (Money Owed to Farmers)**: Itemized creditor ledger showing farmer name, volume supplied, total cost, paid amount, pending payout balance, and payout status.
+- **Multi-Period Analytics & PDF Reports**:
+  - Period filters: **Day**, **Weekly**, **Monthly**, **Yearly**, and **All-Time**.
+  - **📄 Download Full Audit Report (PDF)**: Multi-page high-res document with executive KPI summary, collections ledger, supplies ledger, totals, and pagination.
+  - **🥛 Collections PDF**: Single-click export of collection receipts for the selected period.
+  - **🚚 Supplies PDF**: Single-click export of supply invoices for the selected period.
+  - **Individual Transaction Slips**: Generate official PDF receipts for any collection or delivery.
 
 #### D. Administrator Portal
 - **Privileged Access**: Locked exclusively to authorized Google administrative accounts via OAuth.

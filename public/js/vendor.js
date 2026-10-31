@@ -4307,6 +4307,7 @@ async function loadOverallAnalytics() {
 
     try {
         initAnalyticsControls();
+        initPrimaryViewSwitcher();
 
         // 1. Fetch all collections for current vendor
         const colSnap = await get(ref(database, 'milkCollections'));
@@ -4470,6 +4471,8 @@ function applyAnalyticsFilterAndRender() {
     renderPeriodBreakdownTable();
     renderDetailedCollectionsTable();
     renderDetailedSuppliesTable();
+    renderBusinessCharts();
+    renderDuesManagementView();
 }
 
 function renderPeriodBreakdownTable() {
@@ -4862,4 +4865,416 @@ function exportSuppliesReportPDF() {
     }
 
     doc.save(`MILKIBA_Supplies_${currentAnalyticsPeriod}_${new Date().toISOString().split('T')[0]}.pdf`);
+}
+
+
+/* =========================================================
+   PRIMARY VIEW SWITCHER (Dashboard vs Dues vs Operations vs Ledger)
+========================================================= */
+
+function initPrimaryViewSwitcher() {
+    document.querySelectorAll('.vendor-nav-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.vendor-nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.vendor-view-panel').forEach(p => p.classList.add('hidden'));
+
+            tab.classList.add('active');
+            const view = tab.dataset.view;
+
+            if (view === 'dashboard') {
+                const el = document.getElementById('vendorDashboardView');
+                if (el) el.classList.remove('hidden');
+                renderBusinessCharts();
+            } else if (view === 'dues') {
+                const el = document.getElementById('vendorDuesView');
+                if (el) el.classList.remove('hidden');
+                renderDuesManagementView();
+            } else if (view === 'operations') {
+                const el = document.getElementById('vendorOperationsView');
+                if (el) el.classList.remove('hidden');
+            } else if (view === 'ledger') {
+                const el = document.getElementById('vendorLedgerView');
+                if (el) el.classList.remove('hidden');
+            }
+        });
+    });
+}
+
+/* =========================================================
+   GRAPHICAL CHARTS ENGINE (Chart.js)
+========================================================= */
+
+let volumeChartInstance = null;
+let financeChartInstance = null;
+let duesChartInstance = null;
+let statusChartInstance = null;
+
+function renderBusinessCharts() {
+    if (!window.Chart) {
+        console.warn('Chart.js not loaded yet.');
+        return;
+    }
+
+    // Build time series labels & data based on filteredPeriodCollections and filteredPeriodSupplies
+    const seriesMap = {};
+
+    const getKey = (dStr) => {
+        if (!dStr) return 'Other';
+        if (currentAnalyticsPeriod === 'year' || currentAnalyticsPeriod === 'all') return dStr.slice(0, 7);
+        return dStr;
+    };
+
+    filteredPeriodCollections.forEach(r => {
+        const k = getKey(r.date);
+        if (!seriesMap[k]) seriesMap[k] = { label: k, inLiters: 0, outLiters: 0, cost: 0, rev: 0 };
+        seriesMap[k].inLiters += Number(r.actualQuantity) || 0;
+        seriesMap[k].cost += Number(r.totalAmount) || 0;
+    });
+
+    filteredPeriodSupplies.forEach(r => {
+        const k = getKey(r.date);
+        if (!seriesMap[k]) seriesMap[k] = { label: k, inLiters: 0, outLiters: 0, cost: 0, rev: 0 };
+        seriesMap[k].outLiters += Number(r.suppliedQuantity) || 0;
+        seriesMap[k].rev += Number(r.totalAmount) || 0;
+    });
+
+    let keys = Object.keys(seriesMap).sort();
+    if (keys.length === 0) {
+        keys = ['No Data'];
+        seriesMap['No Data'] = { inLiters: 0, outLiters: 0, cost: 0, rev: 0 };
+    }
+
+    const labels = keys;
+    const inLitersData = keys.map(k => seriesMap[k].inLiters);
+    const outLitersData = keys.map(k => seriesMap[k].outLiters);
+
+    const costData = keys.map(k => seriesMap[k].cost);
+    const revData = keys.map(k => seriesMap[k].rev);
+    const profitData = keys.map(k => seriesMap[k].rev - seriesMap[k].cost);
+
+    // 1. Volume Flow Chart
+    const volCtx = document.getElementById('volumeChartCanvas');
+    if (volCtx) {
+        if (volumeChartInstance) { volumeChartInstance.destroy(); volumeChartInstance = null; }
+        volumeChartInstance = new window.Chart(volCtx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Milk In / Collected (L)',
+                        data: inLitersData,
+                        backgroundColor: 'rgba(22, 128, 60, 0.75)',
+                        borderColor: '#16803c',
+                        borderWidth: 1.5,
+                        borderRadius: 5
+                    },
+                    {
+                        label: 'Milk Out / Supplied (L)',
+                        data: outLitersData,
+                        backgroundColor: 'rgba(37, 99, 235, 0.75)',
+                        borderColor: '#2563eb',
+                        borderWidth: 1.5,
+                        borderRadius: 5
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11, weight: 'bold' } } },
+                    tooltip: { mode: 'index', intersect: false }
+                },
+                scales: {
+                    x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+                    y: { beginAtZero: true, grid: { color: '#f1f5f9' }, title: { display: true, text: 'Liters' } }
+                }
+            }
+        });
+    }
+
+    // 2. Financial Inflow & Outflow Chart
+    const finCtx = document.getElementById('financeChartCanvas');
+    if (finCtx) {
+        if (financeChartInstance) { financeChartInstance.destroy(); financeChartInstance = null; }
+        financeChartInstance = new window.Chart(finCtx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Sales Revenue (₹)',
+                        data: revData,
+                        backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                        borderColor: '#10b981',
+                        borderWidth: 1.5,
+                        borderRadius: 5
+                    },
+                    {
+                        label: 'Purchase Cost (₹)',
+                        data: costData,
+                        backgroundColor: 'rgba(239, 68, 68, 0.8)',
+                        borderColor: '#ef4444',
+                        borderWidth: 1.5,
+                        borderRadius: 5
+                    },
+                    {
+                        label: 'Net Gross Profit (₹)',
+                        data: profitData,
+                        type: 'line',
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.15)',
+                        borderWidth: 2.5,
+                        tension: 0.25,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11, weight: 'bold' } } },
+                    tooltip: { mode: 'index', intersect: false }
+                },
+                scales: {
+                    x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+                    y: { beginAtZero: true, grid: { color: '#f1f5f9' }, title: { display: true, text: '₹ Amount' } }
+                }
+            }
+        });
+    }
+
+    // Calculate totals for Dues & Status charts
+    let pendSeller = 0, paidSeller = 0;
+    let pendBuyer = 0, paidBuyer = 0;
+    let paidCount = 0, partialCount = 0, unpaidCount = 0;
+
+    filteredPeriodCollections.forEach(r => {
+        pendSeller += Number(r.pendingAmount) || 0;
+        paidSeller += Number(r.paymentAmount) || 0;
+        if (r.paymentStatus === 'Paid') paidCount++;
+        else if (r.paymentStatus === 'Partial') partialCount++;
+        else unpaidCount++;
+    });
+
+    filteredPeriodSupplies.forEach(r => {
+        pendBuyer += Number(r.pendingAmount) || 0;
+        paidBuyer += Number(r.paymentAmount) || 0;
+        if (r.paymentStatus === 'Paid') paidCount++;
+        else if (r.paymentStatus === 'Partial') partialCount++;
+        else unpaidCount++;
+    });
+
+    // 3. Dues & Debt Exposure Chart
+    const duesCtx = document.getElementById('duesChartCanvas');
+    if (duesCtx) {
+        if (duesChartInstance) { duesChartInstance.destroy(); duesChartInstance = null; }
+        const hasDuesData = (pendBuyer + pendSeller + paidBuyer + paidSeller) > 0;
+        duesChartInstance = new window.Chart(duesCtx, {
+            type: 'doughnut',
+            data: {
+                labels: hasDuesData
+                    ? ['Buyer Dues (To Collect)', 'Seller Dues (To Pay)', 'Collected from Buyers', 'Paid to Farmers']
+                    : ['No Financial Data'],
+                datasets: [{
+                    data: hasDuesData ? [pendBuyer, pendSeller, paidBuyer, paidSeller] : [1],
+                    backgroundColor: hasDuesData
+                        ? ['#f59e0b', '#ef4444', '#10b981', '#3b82f6']
+                        : ['#e2e8f0'],
+                    borderWidth: 2,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } }
+                },
+                cutout: '65%'
+            }
+        });
+    }
+
+    // 4. Payment Settlement Distribution Chart
+    const statusCtx = document.getElementById('statusChartCanvas');
+    if (statusCtx) {
+        if (statusChartInstance) { statusChartInstance.destroy(); statusChartInstance = null; }
+        const totalTx = paidCount + partialCount + unpaidCount;
+        statusChartInstance = new window.Chart(statusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: totalTx > 0 ? ['Fully Paid', 'Partial Payment', 'Unpaid'] : ['No Transactions'],
+                datasets: [{
+                    data: totalTx > 0 ? [paidCount, partialCount, unpaidCount] : [1],
+                    backgroundColor: totalTx > 0 ? ['#22c55e', '#f59e0b', '#ef4444'] : ['#e2e8f0'],
+                    borderWidth: 2,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } }
+                },
+                cutout: '65%'
+            }
+        });
+    }
+
+    // Update Unit Economics
+    updateUnitEconomics();
+}
+
+function updateUnitEconomics() {
+    let totColLiters = 0, totColCost = 0;
+    filteredPeriodCollections.forEach(r => {
+        totColLiters += Number(r.actualQuantity) || 0;
+        totColCost += Number(r.totalAmount) || 0;
+    });
+
+    let totSupLiters = 0, totSupRev = 0;
+    filteredPeriodSupplies.forEach(r => {
+        totSupLiters += Number(r.suppliedQuantity) || 0;
+        totSupRev += Number(r.totalAmount) || 0;
+    });
+
+    const avgBuyPrice = totColLiters > 0 ? (totColCost / totColLiters) : 0;
+    const avgSellPrice = totSupLiters > 0 ? (totSupRev / totSupLiters) : 0;
+    const spread = avgSellPrice - avgBuyPrice;
+    const efficiency = totColLiters > 0 ? ((totSupLiters / totColLiters) * 100).toFixed(1) : 0;
+
+    const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+
+    setTxt('unitAvgPurchaseRate', `₹${avgBuyPrice.toFixed(2)} / L`);
+    setTxt('unitAvgSellingRate', `₹${avgSellPrice.toFixed(2)} / L`);
+
+    const spreadEl = document.getElementById('unitMarginSpread');
+    if (spreadEl) {
+        spreadEl.textContent = `${spread >= 0 ? '+' : ''}₹${spread.toFixed(2)} / L`;
+        spreadEl.className = 'unit-eco-val ' + (spread >= 0 ? 'text-success' : 'text-danger');
+    }
+
+    setTxt('unitEfficiencyRate', `${efficiency}%`);
+}
+
+/* =========================================================
+   DUES & RISK MANAGEMENT VIEW RENDERER
+========================================================= */
+
+function renderDuesManagementView() {
+    // 1. Group all supplies by buyer to find outstanding balances
+    const buyerMap = {};
+    let totalReceivable = 0;
+
+    allVendorSuppliesCache.forEach(r => {
+        const id = r.buyerId || r.buyerName || 'Unknown';
+        if (!buyerMap[id]) {
+            buyerMap[id] = {
+                id,
+                name: r.buyerName || 'Customer',
+                liters: 0,
+                billed: 0,
+                paid: 0,
+                pending: 0
+            };
+        }
+        buyerMap[id].liters += Number(r.suppliedQuantity) || 0;
+        buyerMap[id].billed += Number(r.totalAmount) || 0;
+        buyerMap[id].paid += Number(r.paymentAmount) || 0;
+        buyerMap[id].pending += Number(r.pendingAmount) || 0;
+        totalReceivable += Number(r.pendingAmount) || 0;
+    });
+
+    const buyerList = Object.values(buyerMap).sort((a, b) => b.pending - a.pending);
+    const debtorsList = buyerList.filter(b => b.pending > 0);
+
+    const buyerTbody = document.getElementById('buyerDebtorsTbody');
+    if (buyerTbody) {
+        if (debtorsList.length === 0) {
+            buyerTbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 25px; color: #16803c; font-weight: 600;">🎉 All buyers have cleared their dues! Zero outstanding receivables.</td></tr>';
+        } else {
+            let html = '';
+            debtorsList.forEach(b => {
+                const isHighRisk = b.pending > 1000;
+                const riskBadge = isHighRisk
+                    ? '<span class="milkiba-status milkiba-status-notpaid">High Due</span>'
+                    : '<span class="milkiba-status milkiba-status-partial">Pending</span>';
+                html += `
+                    <tr>
+                        <td><strong>${b.name}</strong></td>
+                        <td>${b.liters.toFixed(2)} L</td>
+                        <td>₹${b.billed.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                        <td>₹${b.paid.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                        <td><strong style="color: #dc2626; font-size: 14px;">₹${b.pending.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong></td>
+                        <td>${riskBadge}</td>
+                    </tr>
+                `;
+            });
+            buyerTbody.innerHTML = html;
+        }
+    }
+
+    const debtorBadge = document.getElementById('buyerDebtorCountBadge');
+    if (debtorBadge) debtorBadge.textContent = `${debtorsList.length} Buyers with Dues`;
+
+    const totalRecEl = document.getElementById('duesTotalReceivable');
+    if (totalRecEl) totalRecEl.textContent = `₹${totalReceivable.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+
+    // 2. Group all collections by seller to find outstanding payables
+    const sellerMap = {};
+    let totalPayable = 0;
+
+    allVendorCollectionsCache.forEach(r => {
+        const id = r.sellerId || r.sellerName || 'Unknown';
+        if (!sellerMap[id]) {
+            sellerMap[id] = {
+                id,
+                name: r.sellerName || 'Farmer',
+                liters: 0,
+                cost: 0,
+                paid: 0,
+                pending: 0
+            };
+        }
+        sellerMap[id].liters += Number(r.actualQuantity) || 0;
+        sellerMap[id].cost += Number(r.totalAmount) || 0;
+        sellerMap[id].paid += Number(r.paymentAmount) || 0;
+        sellerMap[id].pending += Number(r.pendingAmount) || 0;
+        totalPayable += Number(r.pendingAmount) || 0;
+    });
+
+    const sellerList = Object.values(sellerMap).sort((a, b) => b.pending - a.pending);
+    const creditorsList = sellerList.filter(s => s.pending > 0);
+
+    const sellerTbody = document.getElementById('sellerCreditorsTbody');
+    if (sellerTbody) {
+        if (creditorsList.length === 0) {
+            sellerTbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 25px; color: #16803c; font-weight: 600;">🎉 All dairy farmers have been fully paid! Zero outstanding payables.</td></tr>';
+        } else {
+            let html = '';
+            creditorsList.forEach(s => {
+                html += `
+                    <tr>
+                        <td><strong>${s.name}</strong></td>
+                        <td>${s.liters.toFixed(2)} L</td>
+                        <td>₹${s.cost.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                        <td>₹${s.paid.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                        <td><strong style="color: #b91c1c; font-size: 14px;">₹${s.pending.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong></td>
+                        <td><span class="milkiba-status milkiba-status-notpaid">Payout Owed</span></td>
+                    </tr>
+                `;
+            });
+            sellerTbody.innerHTML = html;
+        }
+    }
+
+    const creditorBadge = document.getElementById('sellerCreditorCountBadge');
+    if (creditorBadge) creditorBadge.textContent = `${creditorsList.length} Farmers Awaiting Payout`;
+
+    const totalPayEl = document.getElementById('duesTotalPayable');
+    if (totalPayEl) totalPayEl.textContent = `₹${totalPayable.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
 }

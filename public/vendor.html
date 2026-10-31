@@ -92,231 +92,403 @@
 
         </header>
 
+        <!-- =====================================================
+             VENDOR SECTION PRIMARY VIEW NAVIGATION
+        ====================================================== -->
+        <nav class="vendor-nav-tabs" role="tablist" aria-label="Vendor Portal Navigation">
+            <button type="button" class="vendor-nav-tab active" data-view="dashboard">
+                📊 Business Analytics & Graphs
+            </button>
+            <button type="button" class="vendor-nav-tab" data-view="dues">
+                💰 Buyer & Seller Dues
+            </button>
+            <button type="button" class="vendor-nav-tab" data-view="operations">
+                ⚡ Daily Operations & Queues
+            </button>
+            <button type="button" class="vendor-nav-tab" data-view="ledger">
+                📋 Historical Ledgers
+            </button>
+        </nav>
+
+
 
         
+        
         <!-- =====================================================
-             OVERALL ANALYTICS & MULTI-PERIOD REPORT DASHBOARD
+             VIEW 1: OVERALL BUSINESS DASHBOARD & GRAPHS
         ====================================================== -->
-        <section id="overallAnalyticsSection" class="analytics-dashboard" aria-label="Overall Dashboard and Analytics">
-            <div class="analytics-header">
-                <div>
-                    <h2>📊 Overall Analytics & Reports</h2>
-                    <p>Track business health, inventory balances, and export Day, Weekly, Monthly, and Yearly PDF reports.</p>
-                </div>
-                <div class="analytics-period-selector" role="group" aria-label="Report Period Selector">
-                    <button type="button" class="analytics-period-btn active" data-period="day">Day Report</button>
-                    <button type="button" class="analytics-period-btn" data-period="week">Weekly Report</button>
-                    <button type="button" class="analytics-period-btn" data-period="month">Monthly Report</button>
-                    <button type="button" class="analytics-period-btn" data-period="year">Yearly Report</button>
-                    <button type="button" class="analytics-period-btn" data-period="all">All-Time</button>
-                </div>
-            </div>
-
-            <div class="analytics-filter-bar">
-                <div class="analytics-inputs">
-                    <div id="filterDayContainer" class="filter-input-group">
-                        <label for="reportDayInput">Select Date:</label>
-                        <input type="date" id="reportDayInput">
+        <div id="vendorDashboardView" class="vendor-view-panel active">
+            <section id="overallAnalyticsSection" class="analytics-dashboard" aria-label="Overall Dashboard and Analytics">
+                <div class="analytics-header">
+                    <div>
+                        <h2>📊 Business Overview & Analytics</h2>
+                        <p>Complete financial metrics, visual trends, and multi-period audit statements.</p>
                     </div>
-                    <div id="filterWeekContainer" class="filter-input-group hidden">
-                        <label for="reportWeekInput">Week (Pick any day in week):</label>
-                        <input type="date" id="reportWeekInput">
-                    </div>
-                    <div id="filterMonthContainer" class="filter-input-group hidden">
-                        <label for="reportMonthInput">Select Month:</label>
-                        <input type="month" id="reportMonthInput">
-                    </div>
-                    <div id="filterYearContainer" class="filter-input-group hidden">
-                        <label for="reportYearInput">Select Year:</label>
-                        <select id="reportYearInput"></select>
-                    </div>
-                    <span id="activePeriodLabel" class="active-period-badge">Today</span>
-                </div>
-
-                <div class="analytics-actions">
-                    <button type="button" id="downloadFullReportPdfBtn" class="btn-pdf-primary">
-                        📄 Download Full Report (PDF)
-                    </button>
-                    <button type="button" id="downloadCollectionsPdfBtn" class="btn-pdf-secondary">
-                        🥛 Collections PDF
-                    </button>
-                    <button type="button" id="downloadSuppliesPdfBtn" class="btn-pdf-secondary">
-                        🚚 Supplies PDF
-                    </button>
-                </div>
-            </div>
-
-            <!-- 8 KPI Metrics Cards -->
-            <div class="analytics-kpi-grid">
-                <div class="kpi-card">
-                    <div class="kpi-icon collected-icon">🥛</div>
-                    <div class="kpi-info">
-                        <span class="kpi-label">Milk Collected</span>
-                        <span id="kpiCollectedLiters" class="kpi-value">0.00 L</span>
-                        <span id="kpiCollectedCount" class="kpi-sub">0 collections</span>
+                    <div class="analytics-period-selector" role="group" aria-label="Report Period Selector">
+                        <button type="button" class="analytics-period-btn active" data-period="day">Day Report</button>
+                        <button type="button" class="analytics-period-btn" data-period="week">Weekly Report</button>
+                        <button type="button" class="analytics-period-btn" data-period="month">Monthly Report</button>
+                        <button type="button" class="analytics-period-btn" data-period="year">Yearly Report</button>
+                        <button type="button" class="analytics-period-btn" data-period="all">All-Time</button>
                     </div>
                 </div>
 
-                <div class="kpi-card">
-                    <div class="kpi-icon supplied-icon">🚚</div>
-                    <div class="kpi-info">
-                        <span class="kpi-label">Milk Supplied</span>
-                        <span id="kpiSuppliedLiters" class="kpi-value">0.00 L</span>
-                        <span id="kpiSuppliedCount" class="kpi-sub">0 supplies</span>
+                <div class="analytics-filter-bar">
+                    <div class="analytics-inputs">
+                        <div id="filterDayContainer" class="filter-input-group">
+                            <label for="reportDayInput">Date:</label>
+                            <input type="date" id="reportDayInput">
+                        </div>
+                        <div id="filterWeekContainer" class="filter-input-group hidden">
+                            <label for="reportWeekInput">Week (Pick day in week):</label>
+                            <input type="date" id="reportWeekInput">
+                        </div>
+                        <div id="filterMonthContainer" class="filter-input-group hidden">
+                            <label for="reportMonthInput">Month:</label>
+                            <input type="month" id="reportMonthInput">
+                        </div>
+                        <div id="filterYearContainer" class="filter-input-group hidden">
+                            <label for="reportYearInput">Year:</label>
+                            <select id="reportYearInput"></select>
+                        </div>
+                        <span id="activePeriodLabel" class="active-period-badge">Today</span>
+                    </div>
+
+                    <div class="analytics-actions">
+                        <button type="button" id="downloadFullReportPdfBtn" class="btn-pdf-primary">
+                            📄 Download Full Report (PDF)
+                        </button>
+                        <button type="button" id="downloadCollectionsPdfBtn" class="btn-pdf-secondary">
+                            🥛 Collections PDF
+                        </button>
+                        <button type="button" id="downloadSuppliesPdfBtn" class="btn-pdf-secondary">
+                            🚚 Supplies PDF
+                        </button>
                     </div>
                 </div>
 
-                <div class="kpi-card">
-                    <div class="kpi-icon stock-icon">📦</div>
-                    <div class="kpi-info">
-                        <span class="kpi-label">Stock Margin / Balance</span>
-                        <span id="kpiNetStockLiters" class="kpi-value">0.00 L</span>
-                        <span id="kpiStockStatus" class="kpi-sub">Balanced</span>
+                <!-- 8 KPI Metrics Cards -->
+                <div class="analytics-kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon collected-icon">🥛</div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Milk Collected</span>
+                            <span id="kpiCollectedLiters" class="kpi-value">0.00 L</span>
+                            <span id="kpiCollectedCount" class="kpi-sub">0 collections</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon supplied-icon">🚚</div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Milk Supplied</span>
+                            <span id="kpiSuppliedLiters" class="kpi-value">0.00 L</span>
+                            <span id="kpiSuppliedCount" class="kpi-sub">0 supplies</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon stock-icon">📦</div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Net Stock / Balance</span>
+                            <span id="kpiNetStockLiters" class="kpi-value">0.00 L</span>
+                            <span id="kpiStockStatus" class="kpi-sub">Balanced</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon cost-icon">💸</div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Total Purchase Cost</span>
+                            <span id="kpiPurchaseCost" class="kpi-value">₹0.00</span>
+                            <span id="kpiPaidToSellers" class="kpi-sub">Paid: ₹0.00</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon revenue-icon">💰</div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Total Sales Revenue</span>
+                            <span id="kpiSalesRevenue" class="kpi-value">₹0.00</span>
+                            <span id="kpiReceivedFromBuyers" class="kpi-sub">Collected: ₹0.00</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon profit-icon">📈</div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Gross Margin / Profit</span>
+                            <span id="kpiGrossMargin" class="kpi-value">₹0.00</span>
+                            <span id="kpiMarginBadge" class="kpi-badge profit">0% Margin</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon payable-icon">⏳</div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Seller Dues (Payable)</span>
+                            <span id="kpiPendingPayables" class="kpi-value text-danger">₹0.00</span>
+                            <span class="kpi-sub">Pending to farmers</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon receivable-icon">🧾</div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Buyer Dues (Receivable)</span>
+                            <span id="kpiPendingReceivables" class="kpi-value text-warning">₹0.00</span>
+                            <span class="kpi-sub">Pending from buyers</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="kpi-card">
-                    <div class="kpi-icon cost-icon">💸</div>
-                    <div class="kpi-info">
-                        <span class="kpi-label">Total Purchase Cost</span>
-                        <span id="kpiPurchaseCost" class="kpi-value">₹0.00</span>
-                        <span id="kpiPaidToSellers" class="kpi-sub">Paid: ₹0.00</span>
+                <!-- Unit Economics & Rates Bar -->
+                <div class="unit-economics-bar">
+                    <div class="unit-eco-card">
+                        <span class="unit-eco-label">Avg Purchase Price</span>
+                        <span id="unitAvgPurchaseRate" class="unit-eco-val">₹0.00 / L</span>
+                        <span class="unit-eco-sub">Paid to dairy farmers</span>
+                    </div>
+                    <div class="unit-eco-card">
+                        <span class="unit-eco-label">Avg Selling Price</span>
+                        <span id="unitAvgSellingRate" class="unit-eco-val">₹0.00 / L</span>
+                        <span class="unit-eco-sub">Billed to consumers</span>
+                    </div>
+                    <div class="unit-eco-card">
+                        <span class="unit-eco-label">Gross Margin Spread</span>
+                        <span id="unitMarginSpread" class="unit-eco-val text-success">+₹0.00 / L</span>
+                        <span class="unit-eco-sub">Profit margin per liter</span>
+                    </div>
+                    <div class="unit-eco-card">
+                        <span class="unit-eco-label">Distribution Ratio</span>
+                        <span id="unitEfficiencyRate" class="unit-eco-val">0.0%</span>
+                        <span class="unit-eco-sub">Supplied vs Collected</span>
                     </div>
                 </div>
 
-                <div class="kpi-card">
-                    <div class="kpi-icon revenue-icon">💰</div>
-                    <div class="kpi-info">
-                        <span class="kpi-label">Total Sales Revenue</span>
-                        <span id="kpiSalesRevenue" class="kpi-value">₹0.00</span>
-                        <span id="kpiReceivedFromBuyers" class="kpi-sub">Collected: ₹0.00</span>
+                <!-- =====================================================
+                     GRAPHICAL CHARTS & VISUALIZATIONS
+                ====================================================== -->
+                <div class="charts-section-header">
+                    <h3>📈 Visual Trends & Performance Graphs</h3>
+                    <p>Graphical representations of milk flows, revenue streams, dues, and settlement ratios.</p>
+                </div>
+
+                <div class="charts-grid">
+                    <!-- Chart 1: Volume Flow -->
+                    <div class="chart-card">
+                        <div class="chart-card-header">
+                            <h4>🥛 Milk In vs Milk Out (Liters)</h4>
+                            <span class="chart-badge">Volume Flow</span>
+                        </div>
+                        <div class="chart-card-body">
+                            <canvas id="volumeChartCanvas"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Chart 2: Financial Flow & Profitability -->
+                    <div class="chart-card">
+                        <div class="chart-card-header">
+                            <h4>💰 Revenue vs Cost vs Net Profit (₹)</h4>
+                            <span class="chart-badge">Financial Flow</span>
+                        </div>
+                        <div class="chart-card-body">
+                            <canvas id="financeChartCanvas"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Chart 3: Dues & Debt Exposure -->
+                    <div class="chart-card">
+                        <div class="chart-card-header">
+                            <h4>⚖️ Dues & Debt Exposure Breakdown</h4>
+                            <span class="chart-badge">Receivables vs Payables</span>
+                        </div>
+                        <div class="chart-card-body">
+                            <canvas id="duesChartCanvas"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Chart 4: Settlement Status Distribution -->
+                    <div class="chart-card">
+                        <div class="chart-card-header">
+                            <h4>💳 Payment Settlement Distribution</h4>
+                            <span class="chart-badge">Paid vs Partial vs Unpaid</span>
+                        </div>
+                        <div class="chart-card-body">
+                            <canvas id="statusChartCanvas"></canvas>
+                        </div>
                     </div>
                 </div>
 
-                <div class="kpi-card">
-                    <div class="kpi-icon profit-icon">📈</div>
-                    <div class="kpi-info">
-                        <span class="kpi-label">Gross Margin / Profit</span>
-                        <span id="kpiGrossMargin" class="kpi-value">₹0.00</span>
-                        <span id="kpiMarginBadge" class="kpi-badge profit">0% Margin</span>
+                <!-- Period Breakdown & Ledgers -->
+                <div class="analytics-detail-container">
+                    <div class="analytics-detail-tabs">
+                        <button type="button" class="analytics-tab-btn active" data-tab="breakdown">📊 Period Breakdown</button>
+                        <button type="button" class="analytics-tab-btn" data-tab="collections">🥛 Collections (<span id="analyticsCollectionsCount">0</span>)</button>
+                        <button type="button" class="analytics-tab-btn" data-tab="supplies">🚚 Supplies (<span id="analyticsSuppliesCount">0</span>)</button>
+                    </div>
+
+                    <div id="analyticsTabBreakdown" class="analytics-tab-panel active">
+                        <div class="table-scroll-wrapper">
+                            <table class="analytics-table">
+                                <thead>
+                                    <tr>
+                                        <th>Period / Date</th>
+                                        <th>Collections (L)</th>
+                                        <th>Supplies (L)</th>
+                                        <th>Stock Margin</th>
+                                        <th>Purchase Cost</th>
+                                        <th>Sales Revenue</th>
+                                        <th>Gross Profit</th>
+                                        <th>Net Pending</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="analyticsBreakdownTbody">
+                                    <tr><td colspan="8" style="text-align: center; padding: 25px; color: #777;">Loading breakdown data...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="analyticsTabCollections" class="analytics-tab-panel">
+                        <div class="table-scroll-wrapper">
+                            <table class="analytics-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Session</th>
+                                        <th>Seller</th>
+                                        <th>Quantity (L)</th>
+                                        <th>Quality</th>
+                                        <th>Rate (₹/L)</th>
+                                        <th>Total (₹)</th>
+                                        <th>Paid (₹)</th>
+                                        <th>Pending (₹)</th>
+                                        <th>Status</th>
+                                        <th>Slip</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="analyticsCollectionsTbody">
+                                    <tr><td colspan="11" style="text-align: center; padding: 25px; color: #777;">Loading collections...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="analyticsTabSupplies" class="analytics-tab-panel">
+                        <div class="table-scroll-wrapper">
+                            <table class="analytics-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Session</th>
+                                        <th>Buyer</th>
+                                        <th>Quantity (L)</th>
+                                        <th>Rate (₹/L)</th>
+                                        <th>Total (₹)</th>
+                                        <th>Paid (₹)</th>
+                                        <th>Pending (₹)</th>
+                                        <th>Status</th>
+                                        <th>Slip</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="analyticsSuppliesTbody">
+                                    <tr><td colspan="10" style="text-align: center; padding: 25px; color: #777;">Loading supplies...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-
-                <div class="kpi-card">
-                    <div class="kpi-icon payable-icon">⏳</div>
-                    <div class="kpi-info">
-                        <span class="kpi-label">Seller Dues (Payable)</span>
-                        <span id="kpiPendingPayables" class="kpi-value text-danger">₹0.00</span>
-                        <span class="kpi-sub">Pending to farmers</span>
-                    </div>
-                </div>
-
-                <div class="kpi-card">
-                    <div class="kpi-icon receivable-icon">🧾</div>
-                    <div class="kpi-info">
-                        <span class="kpi-label">Buyer Dues (Receivable)</span>
-                        <span id="kpiPendingReceivables" class="kpi-value text-warning">₹0.00</span>
-                        <span class="kpi-sub">Pending from buyers</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tabbed Detailed Tables -->
-            <div class="analytics-detail-container">
-                <div class="analytics-detail-tabs">
-                    <button type="button" class="analytics-tab-btn active" data-tab="breakdown">📊 Period Breakdown</button>
-                    <button type="button" class="analytics-tab-btn" data-tab="collections">🥛 Collections (<span id="analyticsCollectionsCount">0</span>)</button>
-                    <button type="button" class="analytics-tab-btn" data-tab="supplies">🚚 Supplies (<span id="analyticsSuppliesCount">0</span>)</button>
-                </div>
-
-                <div id="analyticsTabBreakdown" class="analytics-tab-panel active">
-                    <div class="table-scroll-wrapper">
-                        <table class="analytics-table">
-                            <thead>
-                                <tr>
-                                    <th>Period / Date</th>
-                                    <th>Collections (L)</th>
-                                    <th>Supplies (L)</th>
-                                    <th>Stock Margin</th>
-                                    <th>Purchase Cost</th>
-                                    <th>Sales Revenue</th>
-                                    <th>Gross Profit</th>
-                                    <th>Pending Dues</th>
-                                </tr>
-                            </thead>
-                            <tbody id="analyticsBreakdownTbody">
-                                <tr>
-                                    <td colspan="8" style="text-align: center; padding: 25px; color: #777;">Loading breakdown data...</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div id="analyticsTabCollections" class="analytics-tab-panel">
-                    <div class="table-scroll-wrapper">
-                        <table class="analytics-table">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Session</th>
-                                    <th>Seller</th>
-                                    <th>Quantity (L)</th>
-                                    <th>Quality</th>
-                                    <th>Rate (₹/L)</th>
-                                    <th>Total (₹)</th>
-                                    <th>Paid (₹)</th>
-                                    <th>Pending (₹)</th>
-                                    <th>Status</th>
-                                    <th>Slip</th>
-                                </tr>
-                            </thead>
-                            <tbody id="analyticsCollectionsTbody">
-                                <tr>
-                                    <td colspan="11" style="text-align: center; padding: 25px; color: #777;">Loading collections...</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div id="analyticsTabSupplies" class="analytics-tab-panel">
-                    <div class="table-scroll-wrapper">
-                        <table class="analytics-table">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Session</th>
-                                    <th>Buyer</th>
-                                    <th>Quantity (L)</th>
-                                    <th>Rate (₹/L)</th>
-                                    <th>Total (₹)</th>
-                                    <th>Paid (₹)</th>
-                                    <th>Pending (₹)</th>
-                                    <th>Status</th>
-                                    <th>Slip</th>
-                                </tr>
-                            </thead>
-                            <tbody id="analyticsSuppliesTbody">
-                                <tr>
-                                    <td colspan="10" style="text-align: center; padding: 25px; color: #777;">Loading supplies...</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- =====================================================
-             DAILY OPERATIONS & QUEUES (TODAY)
-        ====================================================== -->
-        <div class="section-divider">
-            <h3 class="section-divider-title">⚡ Daily Operations & Live Queue</h3>
+            </section>
         </div>
 
-        <section
-            class="vendor-summary"
+        <!-- =====================================================
+             VIEW 2: DUES & RISK MANAGEMENT (BUYER & SELLER DUES)
+        ====================================================== -->
+        <div id="vendorDuesView" class="vendor-view-panel hidden">
+            <section class="dues-management-section" aria-label="Dues and Risk Management">
+                <div class="dues-section-header">
+                    <div>
+                        <h2>💰 Dues & Outstanding Balances</h2>
+                        <p>Track who owes you money (Buyer Receivables) and who you need to pay (Seller Payables).</p>
+                    </div>
+                    <div class="dues-summary-badges">
+                        <div class="due-badge receivable-badge">
+                            <span>Total Receivable (From Buyers):</span>
+                            <strong id="duesTotalReceivable">₹0.00</strong>
+                        </div>
+                        <div class="due-badge payable-badge">
+                            <span>Total Payable (To Farmers):</span>
+                            <strong id="duesTotalPayable">₹0.00</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dues-grid">
+                    <!-- Buyer Debtors Table -->
+                    <div class="dues-card">
+                        <div class="dues-card-header">
+                            <div>
+                                <h3>📥 Buyer Receivables (Pending from Buyers)</h3>
+                                <p>Customers with unpaid or partial balances</p>
+                            </div>
+                            <span id="buyerDebtorCountBadge" class="count-pill">0 Buyers</span>
+                        </div>
+                        <div class="table-scroll-wrapper">
+                            <table class="analytics-table">
+                                <thead>
+                                    <tr>
+                                        <th>Buyer Name</th>
+                                        <th>Total Bought (L)</th>
+                                        <th>Total Billed</th>
+                                        <th>Amount Paid</th>
+                                        <th>Pending Balance</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="buyerDebtorsTbody">
+                                    <tr><td colspan="6" style="text-align: center; padding: 20px; color: #777;">No outstanding buyer dues.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Seller Payables Table -->
+                    <div class="dues-card">
+                        <div class="dues-card-header">
+                            <div>
+                                <h3>📤 Seller Payables (Owed to Dairy Farmers)</h3>
+                                <p>Farmers awaiting milk collection payouts</p>
+                            </div>
+                            <span id="sellerCreditorCountBadge" class="count-pill">0 Farmers</span>
+                        </div>
+                        <div class="table-scroll-wrapper">
+                            <table class="analytics-table">
+                                <thead>
+                                    <tr>
+                                        <th>Farmer Name</th>
+                                        <th>Total Supplied (L)</th>
+                                        <th>Total Cost</th>
+                                        <th>Amount Paid</th>
+                                        <th>Pending Payout</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="sellerCreditorsTbody">
+                                    <tr><td colspan="6" style="text-align: center; padding: 20px; color: #777;">No outstanding seller payables.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- =====================================================
+             VIEW 3: LIVE OPERATIONS & ACTIVE QUEUES
+        ====================================================== -->
+        <div id="vendorOperationsView" class="vendor-view-panel hidden">
+        <section class="vendor-summary"
             aria-label="Daily Summary"
         >
 
@@ -434,15 +606,19 @@
         </section>
 
 
+        
+        </div> <!-- End of vendorOperationsView -->
+
         <!-- =====================================================
-             HISTORY
-
-             vendor.js dynamically creates:
-             Collection History
-             Supply History
+             VIEW 4: HISTORICAL LEDGERS & CHANGE AUDIT
         ====================================================== -->
+        <div id="vendorLedgerView" class="vendor-view-panel hidden">
+            <div class="section-divider">
+                <h3 class="section-divider-title">📋 Historical Transaction Ledgers & Change Requests</h3>
+            </div>
+            <div id="milkibaHistoryWrapper"></div>
+        </div>
 
-        <div id="milkibaHistoryWrapper"></div>
 
 
     </main>
