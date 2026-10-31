@@ -2263,20 +2263,20 @@
 
         </header>
 
-        <!-- =====================================================
+                <!-- =====================================================
              VENDOR SECTION PRIMARY VIEW NAVIGATION
         ====================================================== -->
         <nav class="vendor-nav-tabs" role="tablist" aria-label="Vendor Portal Navigation">
-            <button type="button" class="vendor-nav-tab active" data-view="dashboard">
-                📊 Dashboard Overview
+            <button type="button" class="vendor-nav-tab active" data-view="operations" id="tabOperations">
+                ⚡ Daily Operations <span style="font-size: 10px; background: rgba(255,255,255,0.25); padding: 2px 6px; border-radius: 10px; margin-left: 4px;">Main</span>
             </button>
-            <button type="button" class="vendor-nav-tab" data-view="dues">
+            <button type="button" class="vendor-nav-tab" data-view="dashboard" id="tabDashboard">
+                📊 Analytics & Reports
+            </button>
+            <button type="button" class="vendor-nav-tab" data-view="dues" id="tabDues">
                 💰 Buyer & Seller Dues
             </button>
-            <button type="button" class="vendor-nav-tab" data-view="operations">
-                ⚡ Daily Operations & Queues
-            </button>
-            <button type="button" class="vendor-nav-tab" data-view="ledger">
+            <button type="button" class="vendor-nav-tab" data-view="ledger" id="tabLedger">
                 📋 Historical Ledgers
             </button>
         </nav>
@@ -2286,9 +2286,158 @@
         
         
         <!-- =====================================================
-             VIEW 1: OVERALL BUSINESS DASHBOARD & GRAPHS
+             MAIN VIEW: DAILY OPERATIONS & QUEUES
         ====================================================== -->
-        <div id="vendorDashboardView" class="vendor-view-panel active">
+        <div id="vendorOperationsView" class="vendor-view-panel active">
+        <section class="vendor-summary"
+            aria-label="Daily Summary"
+        >
+
+            <div class="summary-card">
+                <h3>Milk Collected</h3>
+                <div id="totalCollected" class="summary-value">0</div>
+            </div>
+
+            <div class="summary-card">
+                <h3>Milk Supplied</h3>
+                <div id="totalSupplied" class="summary-value">0</div>
+            </div>
+
+            <div class="summary-card">
+                <h3>Purchase Cost</h3>
+                <div id="purchaseCost" class="summary-value">₹0.00</div>
+            </div>
+
+            <div class="summary-card">
+                <h3>Sales Revenue</h3>
+                <div id="salesRevenue" class="summary-value">₹0.00</div>
+            </div>
+
+            <div class="summary-card">
+                <h3>Pending Purchase</h3>
+                <div id="pendingPurchase" class="summary-value">₹0.00</div>
+            </div>
+
+            <div class="summary-card">
+                <h3>Pending Sales</h3>
+                <div id="pendingSales" class="summary-value">₹0.00</div>
+            </div>
+
+            <div class="summary-card">
+                <h3>Remaining Milk</h3>
+                <div id="remainingMilk" class="summary-value">0</div>
+            </div>
+
+            <div class="summary-card">
+                <h3>Gross Margin</h3>
+                <div id="grossMargin" class="summary-value">₹0.00</div>
+            </div>
+
+            <div class="summary-card">
+                <h3>Transactions</h3>
+                <div id="transactionCount" class="summary-value">0</div>
+            </div>
+
+        </section>
+
+        <!-- QUICK ACCESS VIEW STRIP -->
+        <div class="vendor-quick-nav-strip" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 18px; margin: 0 0 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 16px;">⚡</span>
+                <span style="font-size: 13px; font-weight: 700; color: #1e293b;">Daily Operations Active</span>
+                <span style="font-size: 12px; color: #64748b;">(Record milk collections from sellers, supplies to buyers, and live queues)</span>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button type="button" onclick="switchVendorView('dashboard')" style="background: #f0fdf4; border: 1px solid #bbf7d0; color: #16803c; padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s;">
+                    📊 Analytics & Reports →
+                </button>
+                <button type="button" onclick="switchVendorView('dues')" style="background: #fffbeb; border: 1px solid #fde68a; color: #b45309; padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s;">
+                    💰 Dues & Balances →
+                </button>
+                <button type="button" onclick="switchVendorView('ledger')" style="background: #f8fafc; border: 1px solid #e2e8f0; color: #475569; padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s;">
+                    📋 Ledgers →
+                </button>
+            </div>
+        </div>
+
+
+        <section class="activity-grid">
+
+            <div class="activity-section">
+
+                <h2>Seller Activity</h2>
+
+                <p
+                    style="
+                        color:#777;
+                        font-size:13px;
+                        margin:0 0 15px;
+                    "
+                >
+                    Sellers waiting for milk collection
+                </p>
+
+                <div id="sellerContainer">
+
+                    <div
+                        style="
+                            padding:20px;
+                            text-align:center;
+                            color:#777;
+                        "
+                    >
+                        Loading sellers...
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="activity-section">
+
+                <h2>Buyer Activity</h2>
+
+                <p
+                    style="
+                        color:#777;
+                        font-size:13px;
+                        margin:0 0 15px;
+                    "
+                >
+                    Buyers waiting for milk supply
+                </p>
+
+                <div id="buyerContainer">
+
+                    <div
+                        style="
+                            padding:20px;
+                            text-align:center;
+                            color:#777;
+                        "
+                    >
+                        Loading buyers...
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        
+        </div> <!-- End of vendorOperationsView -->
+
+        <!-- =====================================================
+             VIEW 4: HISTORICAL LEDGERS & CHANGE AUDIT
+        ====================================================== -->
+
+        <!-- =====================================================
+             VIEW 2: OVERALL BUSINESS DASHBOARD & GRAPHS
+        ====================================================== -->
+        <div id="vendorDashboardView" class="vendor-view-panel hidden">
             <section id="overallAnalyticsSection" class="analytics-dashboard" aria-label="Overall Dashboard and Analytics">
                 <div class="analytics-header">
                     <div>
@@ -2576,6 +2725,10 @@
         <!-- =====================================================
              VIEW 2: DUES & RISK MANAGEMENT (BUYER & SELLER DUES)
         ====================================================== -->
+
+        <!-- =====================================================
+             VIEW 3: DUES & RISK MANAGEMENT (BUYER & SELLER DUES)
+        ====================================================== -->
         <div id="vendorDuesView" class="vendor-view-panel hidden">
             <section class="dues-management-section" aria-label="Dues and Risk Management">
                 <div class="dues-section-header">
@@ -2658,127 +2811,6 @@
         <!-- =====================================================
              VIEW 3: LIVE OPERATIONS & ACTIVE QUEUES
         ====================================================== -->
-        <div id="vendorOperationsView" class="vendor-view-panel hidden">
-        <section class="vendor-summary"
-            aria-label="Daily Summary"
-        >
-
-            <div class="summary-card">
-                <h3>Milk Collected</h3>
-                <div id="totalCollected" class="summary-value">0</div>
-            </div>
-
-            <div class="summary-card">
-                <h3>Milk Supplied</h3>
-                <div id="totalSupplied" class="summary-value">0</div>
-            </div>
-
-            <div class="summary-card">
-                <h3>Purchase Cost</h3>
-                <div id="purchaseCost" class="summary-value">₹0.00</div>
-            </div>
-
-            <div class="summary-card">
-                <h3>Sales Revenue</h3>
-                <div id="salesRevenue" class="summary-value">₹0.00</div>
-            </div>
-
-            <div class="summary-card">
-                <h3>Pending Purchase</h3>
-                <div id="pendingPurchase" class="summary-value">₹0.00</div>
-            </div>
-
-            <div class="summary-card">
-                <h3>Pending Sales</h3>
-                <div id="pendingSales" class="summary-value">₹0.00</div>
-            </div>
-
-            <div class="summary-card">
-                <h3>Remaining Milk</h3>
-                <div id="remainingMilk" class="summary-value">0</div>
-            </div>
-
-            <div class="summary-card">
-                <h3>Gross Margin</h3>
-                <div id="grossMargin" class="summary-value">₹0.00</div>
-            </div>
-
-            <div class="summary-card">
-                <h3>Transactions</h3>
-                <div id="transactionCount" class="summary-value">0</div>
-            </div>
-
-        </section>
-
-
-        <section class="activity-grid">
-
-            <div class="activity-section">
-
-                <h2>Seller Activity</h2>
-
-                <p
-                    style="
-                        color:#777;
-                        font-size:13px;
-                        margin:0 0 15px;
-                    "
-                >
-                    Sellers waiting for milk collection
-                </p>
-
-                <div id="sellerContainer">
-
-                    <div
-                        style="
-                            padding:20px;
-                            text-align:center;
-                            color:#777;
-                        "
-                    >
-                        Loading sellers...
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="activity-section">
-
-                <h2>Buyer Activity</h2>
-
-                <p
-                    style="
-                        color:#777;
-                        font-size:13px;
-                        margin:0 0 15px;
-                    "
-                >
-                    Buyers waiting for milk supply
-                </p>
-
-                <div id="buyerContainer">
-
-                    <div
-                        style="
-                            padding:20px;
-                            text-align:center;
-                            color:#777;
-                        "
-                    >
-                        Loading buyers...
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        
-        </div> <!-- End of vendorOperationsView -->
 
         <!-- =====================================================
              VIEW 4: HISTORICAL LEDGERS & CHANGE AUDIT
@@ -2786,6 +2818,11 @@
         <div id="vendorLedgerView" class="vendor-view-panel hidden">
             <div class="section-divider">
                 <h3 class="section-divider-title">📋 Historical Transaction Ledgers & Change Requests</h3>
+            </div>
+            <div id="milkibaHistoryWrapper"></div>
+        </div>
+
+    lass="section-divider-title">📋 Historical Transaction Ledgers & Change Requests</h3>
             </div>
             <div id="milkibaHistoryWrapper"></div>
         </div>

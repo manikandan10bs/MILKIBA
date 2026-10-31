@@ -4869,34 +4869,71 @@ function exportSuppliesReportPDF() {
 
 
 /* =========================================================
-   PRIMARY VIEW SWITCHER (Dashboard vs Dues vs Operations vs Ledger)
+   PRIMARY VIEW SWITCHER (Daily Operations [Main] vs Dashboard vs Dues vs Ledger)
 ========================================================= */
 
+let primaryViewSwitcherInitialized = false;
+
+function switchVendorView(view) {
+    const validViews = ['operations', 'dashboard', 'dues', 'ledger'];
+    const targetView = validViews.includes(view) ? view : 'operations';
+
+    document.querySelectorAll('.vendor-nav-tab').forEach(t => {
+        t.classList.toggle('active', t.dataset.view === targetView);
+    });
+
+    document.querySelectorAll('.vendor-view-panel').forEach(p => {
+        p.classList.add('hidden');
+    });
+
+    if (targetView === 'operations') {
+        const el = document.getElementById('vendorOperationsView');
+        if (el) el.classList.remove('hidden');
+    } else if (targetView === 'dashboard') {
+        const el = document.getElementById('vendorDashboardView');
+        if (el) el.classList.remove('hidden');
+        renderBusinessCharts();
+    } else if (targetView === 'dues') {
+        const el = document.getElementById('vendorDuesView');
+        if (el) el.classList.remove('hidden');
+        renderDuesManagementView();
+    } else if (targetView === 'ledger') {
+        const el = document.getElementById('vendorLedgerView');
+        if (el) el.classList.remove('hidden');
+    }
+
+    try {
+        if (window.location.hash !== '#' + targetView) {
+            history.replaceState(null, '', '#' + targetView);
+        }
+    } catch (e) {}
+}
+
+window.switchVendorView = switchVendorView;
+
 function initPrimaryViewSwitcher() {
+    if (primaryViewSwitcherInitialized) return;
+    primaryViewSwitcherInitialized = true;
+
     document.querySelectorAll('.vendor-nav-tab').forEach(tab => {
         tab.addEventListener('click', () => {
-            document.querySelectorAll('.vendor-nav-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.vendor-view-panel').forEach(p => p.classList.add('hidden'));
-
-            tab.classList.add('active');
-            const view = tab.dataset.view;
-
-            if (view === 'dashboard') {
-                const el = document.getElementById('vendorDashboardView');
-                if (el) el.classList.remove('hidden');
-                renderBusinessCharts();
-            } else if (view === 'dues') {
-                const el = document.getElementById('vendorDuesView');
-                if (el) el.classList.remove('hidden');
-                renderDuesManagementView();
-            } else if (view === 'operations') {
-                const el = document.getElementById('vendorOperationsView');
-                if (el) el.classList.remove('hidden');
-            } else if (view === 'ledger') {
-                const el = document.getElementById('vendorLedgerView');
-                if (el) el.classList.remove('hidden');
-            }
+            switchVendorView(tab.dataset.view);
         });
+    });
+
+    // Check if initial hash exists (defaulting to operations as main)
+    const currentHash = window.location.hash.replace('#', '').trim();
+    if (['operations', 'dashboard', 'dues', 'ledger'].includes(currentHash)) {
+        switchVendorView(currentHash);
+    } else {
+        switchVendorView('operations');
+    }
+
+    window.addEventListener('hashchange', () => {
+        const h = window.location.hash.replace('#', '').trim();
+        if (['operations', 'dashboard', 'dues', 'ledger'].includes(h)) {
+            switchVendorView(h);
+        }
     });
 }
 
