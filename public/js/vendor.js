@@ -4892,7 +4892,13 @@ function switchVendorView(view) {
     } else if (targetView === 'dashboard') {
         const el = document.getElementById('vendorDashboardView');
         if (el) el.classList.remove('hidden');
-        renderBusinessCharts();
+        requestAnimationFrame(() => {
+            if (typeof applyAnalyticsFilterAndRender === 'function') {
+                applyAnalyticsFilterAndRender();
+            } else {
+                renderBusinessCharts();
+            }
+        });
     } else if (targetView === 'dues') {
         const el = document.getElementById('vendorDuesView');
         if (el) el.classList.remove('hidden');
@@ -4946,7 +4952,10 @@ let financeChartInstance = null;
 let duesChartInstance = null;
 let statusChartInstance = null;
 
-function renderBusinessCharts() {
+async function renderBusinessCharts() {
+    if (!window.Chart) {
+        await ensureChartJs();
+    }
     if (!window.Chart) {
         console.warn('Chart.js not loaded yet.');
         return;
